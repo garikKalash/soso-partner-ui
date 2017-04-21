@@ -1,0 +1,25 @@
+.welcome-page-button-main-class{
+  background: rgba(7, 65, 149, 0.44);
+}
+
+.welcome-page-register-text{
+  color: rgba(255, 253, 254, 0.78);
+  font-size: 36px;
+  font-family: Calibri !important;
+
+}
+
+.main-content-welcome-page{
+  margin-top: 14%;
+  margin-bottom: 14%;
+}
+
+.register-button{
+  height: 50px;
+  width: 150px !important;
+  font-size: 150%;
+  font-family: Calibri !important;
+
+}
+
+

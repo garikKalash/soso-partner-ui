@@ -1,0 +1,88 @@
+<button pButton type="button" label="My Orders"></button>
+<button pButton type="button" label="Sign Out"></button>
+
+<div id="partnerDetailsBlockId">
+
+  <div style="display: inline-block">
+    <img id="partnerAccountImageId" src="{{safeImage(partner.imgpath)}}"
+         style="width: 250px; height: 250px; margin-right: 5px"/>
+    <label class="custom-file-upload">
+      <input name="file" type="file" ng2FileSelect [uploader]="accountImageUploader"/>
+      <i class="fa fa-plus"></i> Upload Logo
+    </label>
+  </div>
+  <div style="display: inline-block">
+    <label for="usernameId" class="bold-label">Username:</label>
+    <p id="usernameId" >{{partner.username}}</p>
+    <p class="bold-label">First Name:</p>
+    <p>{{partner.name}}</p>
+    <p class="bold-label">Telephone:</p>
+    <input type="text" pInputText *ngIf="_isEditingPartnerMainDetails" id="partnerNameId"
+           [(ngModel)]="_editedPartner.telephone" field="_editedPartner.telephone"/>
+    <p *ngIf="!_isEditingPartnerMainDetails">{{partner.telephone}}</p>
+    <p class="bold-label">Service:</p>
+    <p>{{partner.serviceName}}</p>
+    <p class="bold-label">Address:</p>
+    <p>{{partner.address}}</p>
+    <button pButton type="button" label="Edit my Details" (click)="editPartnerMainInfo()"
+            *ngIf="!_isEditingPartnerMainDetails"></button>
+    <button pButton type="button" label="Save Details" (click)="saveMainInfo()"
+            *ngIf="_isEditingPartnerMainDetails"></button>
+    <button pButton type="button" label="Cancel" (click)="cancelEditingMainInfo()"
+            *ngIf="_isEditingPartnerMainDetails"></button>
+  </div>
+</div>
+<hr>
+<div id="partnerFeedbacksBlockId">
+  <h2>Feedbacks</h2>
+</div>
+<hr>
+<div id="partnerPhotosBlockId">
+  <h2>Photos({{partner.images?.length}})</h2>
+  <div *ngFor="let image of partner.images" style="display: inline-block; margin-right: 10px;">
+    <img src="{{safeImage(image)}}"
+         style="width: 180px; height: 180px;"/>
+
+  </div>
+  <label class="custom-file-upload">
+    <input name="file" type="file" ng2FileSelect [uploader]="partnerPhotoUploader"/>
+    <i class="fa fa-plus"></i> Upload Photo
+  </label>
+</div>
+<hr>
+<div id="partnerNoticesBlockId">
+  <div style="display: inline-block;">
+    <h2>Notice</h2>
+    <button pButton type="button" label="Edit" *ngIf="!_isEditingPartnerNoticeDetails" (click)="editNotices()"></button>
+    <button pButton type="button" label="Save" *ngIf="_isEditingPartnerNoticeDetails" (click)="saveNotice()"></button>
+    <button pButton type="button" label="Cancel" *ngIf="_isEditingPartnerNoticeDetails"
+            (click)="cancelNotices()"></button>
+  </div>
+  <p *ngIf="!_isEditingPartnerNoticeDetails">{{partner.notices}}</p>
+  <input *ngIf="_isEditingPartnerNoticeDetails" type="text" pInputText [(ngModel)]="_editedPartner.notices"
+         style="height: 50px;width: 150px;"/>
+</div>
+<hr>
+<div id="partnerFollowersBlockId">
+  <h2>Followers(5)</h2>
+</div>
+<hr>
+<div id="partnerAddressBlockId">
+  <h2>Address</h2>
+  <div id="addessMapBlockId">
+    <button pButton type="button" label="Change Address" *ngIf="!needChangeAddress()"
+            (click)="changeAddress()"></button>
+    <button pButton type="button" *ngIf="needChangeAddress()" label="Save Address"
+            (click)="saveAddress()"></button>
+    <div class="form-group">
+      <input placeholder="Գրիր հասցեդ․․․" autocorrect="off" [(ngModel)]="_editedPartner.address" autocapitalize="off"
+             spellcheck="off" type="text" class="form-control" #search [formControl]="mapSearchControl()">
+    </div>
+    <sebm-google-map style="height:200px;" [latitude]="mapLatitude()" [longitude]="mapLongitude()" [scrollwheel]="false"
+                     [zoom]="mapZoom()">
+      <sebm-google-map-marker (dragEnd)="addressMarkerDragEnd($event)" [markerDraggable]="needChangeAddress()"
+                              [latitude]="mapLatitude()" [longitude]="mapLongitude()"></sebm-google-map-marker>
+    </sebm-google-map>
+  </div>
+
+

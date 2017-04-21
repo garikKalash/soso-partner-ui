@@ -1,0 +1,18 @@
+<div class="col-md-6 col-md-offset-3">
+  <form name="form" (ngSubmit)="l.form.valid && login()" #l="ngForm" novalidate>
+    <div class="form-group" [ngClass]="{ 'has-error': l.submitted && !phonenumber.valid }">
+      <label for="phonenumber">Հեռախոսահամարը</label><br/>
+      <input class="form-control" id="phonenumber" type="text" name="phonenumber" [(ngModel)]="model.phonenumber" #phonenumber="ngModel" required />
+      <span *ngIf="l.submitted && !phonenumber.valid" class="help-block">Հեռախոսահամարը պարտադիր է</span>
+    </div>
+    <div class="form-group" [ngClass]="{ 'has-error': l.submitted && !password.valid }">
+      <label for="password">Գաղտնաբառ</label><br/>
+      <input id="password" class="form-control" type="password"  name="password" [(ngModel)]="model.password" #password="ngModel" required />
+      <span *ngIf="l.submitted && !password.valid" class="help-block">Գատնաբառը պարտադիր է</span>
+    </div>
+    <div class="form-group">
+      <button class="form-control soso-button" [disabled]="loading" >Մուտք</button>
+      <img *ngIf="loading" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
+    </div>
+  </form>
+</div>
