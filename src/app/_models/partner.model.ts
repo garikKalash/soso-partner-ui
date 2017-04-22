@@ -4,6 +4,13 @@ import {Client} from "./client.model";
  * Created by Home on 3/4/2017.
  */
 export class Partner {
+  get reservable(): boolean {
+    return this._reservable;
+  }
+
+  set reservable(value: boolean) {
+    this._reservable = value;
+  }
   get serviceName(): string {
     return this._serviceName;
   }
@@ -34,6 +41,7 @@ export class Partner {
   private _longitude: number;
   private _latitude: number;
   private _imgpath: string;
+  private _reservable:boolean;
 
   constructor(id: number,
               number: string,
@@ -43,7 +51,8 @@ export class Partner {
               password: string,
               notices:string,
               longitute: number,
-              latitude:number) {
+              latitude:number,
+              reservable:boolean) {
     this._id = id;
     this._name = number;
     this._telephone = telephone;
@@ -53,6 +62,7 @@ export class Partner {
     this._longitude = longitute;
     this._latitude = latitude;
     this._notices = notices;
+    this._reservable = reservable;
   }
 
   get longitude(): number {
