@@ -52,11 +52,11 @@ export class PartnerAccountComponent implements OnInit {
 
   }
 
-  safeImage(imgBase64:string){
-    if(imgBase64 === undefined || imgBase64 === null){
+  safeImage(path:string){
+    if(path === undefined || path === null){
       return this.sanitizer.sanitize(SecurityContext.URL, `/src/loading-25x25.gif`);
     }
-    return this.sanitizer.sanitize(SecurityContext.URL, `data:image/jpg;base64,${imgBase64}`);
+    return this.sanitizer.sanitize(SecurityContext.URL, `${path}`);
   }
 
   mapLongitude(): number {
@@ -143,8 +143,6 @@ export class PartnerAccountComponent implements OnInit {
           this.setServiceNameById(this._partner.serviceId);
           this.initFileUploader();
           this.initPartnerPhotoUploader();
-          this.setAccountLogo();
-          this.getPartnerPhotos()
           this.addressService.initMapDetails(this._searchElementRef,this._partner.longitude,this._partner.latitude);
 
         });
@@ -193,15 +191,15 @@ export class PartnerAccountComponent implements OnInit {
   setAccountLogo(): void {
     this.partnerService.getPartnerImage(this._partner.id)
       .subscribe((responseJson: string) => {
-        this._partner.imgpath = ConverterUtils.getAccountImageBase64FromJsonString(responseJson);
-      })
+        this._partner.imgpath = ConverterUtils.getAccountImageUrlFromJsonString(responseJson);
+      });
 
   }
 
   getPartnerPhotos(): void {
     this.partnerService.getPartnerPhotos(this._partner.id)
       .subscribe((responseJson: string) => {
-        this._partner.images = ConverterUtils.getPartnerPhotosInBase64FromJsonString(responseJson);
+        this._partner.images = ConverterUtils.getPartnerPhotosUrlsFromJsonString(responseJson);
         this.partnerPhotoUploader.clearQueue();
       })
 
@@ -287,6 +285,10 @@ export class PartnerAccountComponent implements OnInit {
     for (let item of this.accountImageUploader.queue) {
       item.upload();
     }
+  }
+
+  goToMyOrders():void{
+    this.router.navigate(["partneraccount/schedule"],{queryParams: {partnerId:this.partner.id}});
   }
 
   addressMarkerDragEnd(event:any):void{

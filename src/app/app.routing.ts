@@ -6,6 +6,7 @@ import {WelcomePageComponent} from "./components/welcome-page-component/wlcPage.
 import {ConnectToSystemComponent} from "./components/register-partner-component/connectToSystem.component";
 import {LoginComponent} from "./components/login-component/login.component";
 import {PartnerAccountComponent} from "./components/partner-account-component/partner-account.component";
+import {PartnerOrdersComponent} from "./components/partner-orders-component/partner-orders.component";
 
 const appRoutes: Routes = [
   {
@@ -20,6 +21,10 @@ const appRoutes: Routes = [
   {
     path: "partneraccount",
     component: PartnerAccountComponent
+  },
+  {
+    path: "partneraccount/schedule",
+    component: PartnerOrdersComponent
   },
  /* {
     path: "connectPartnerToSystem",

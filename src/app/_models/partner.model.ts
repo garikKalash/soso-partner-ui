@@ -41,6 +41,7 @@ export class Partner {
   private _longitude: number;
   private _latitude: number;
   private _imgpath: string;
+  private _imgId: number;
   private _reservable:boolean;
 
   constructor(id: number,
@@ -75,6 +76,14 @@ export class Partner {
 
   get latitude(): number {
     return this._latitude;
+  }
+
+  get imgId(): number {
+    return this._imgId;
+  }
+
+  set imgId(value: number) {
+    this._imgId = value;
   }
 
   set latitude(value: number) {

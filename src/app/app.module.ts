@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import {NgModule, ChangeDetectorRef} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { HttpModule } from '@angular/http';
 
@@ -15,7 +15,9 @@ import {ClassifierService} from "./_services/classifier.service";
 import {FileSelectDirective} from "ng2-file-upload";
 import {AgmCoreModule} from "angular2-google-maps/core";
 import {AddressService} from "./_services/address.service";
-import {InputTextModule} from 'primeng/primeng';
+import {InputTextModule,ScheduleModule,CalendarModule,DialogModule} from 'primeng/primeng';
+import {PartnerOrdersComponent} from "./components/partner-orders-component/partner-orders.component";
+import {ScheduleService} from "./_services/schedule.service";
 
 
 @NgModule({
@@ -23,7 +25,8 @@ import {InputTextModule} from 'primeng/primeng';
     AppComponent,
     WelcomePageComponent,
     PartnerAccountComponent,
-    FileSelectDirective
+    FileSelectDirective,
+    PartnerOrdersComponent
   ],
   imports: [
     AgmCoreModule.forRoot({
@@ -36,13 +39,17 @@ import {InputTextModule} from 'primeng/primeng';
     FormsModule,
     HttpModule,
     ButtonModule,
-    InputTextModule
+    InputTextModule,
+    ScheduleModule,
+    CalendarModule,
+    DialogModule
   ],
   providers: [
     HttpWrap,
     PartnerService,
     ClassifierService,
-    AddressService
+    AddressService,
+    ScheduleService,
   ],
   bootstrap: [AppComponent]
 })

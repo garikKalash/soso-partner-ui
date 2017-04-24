@@ -13,12 +13,12 @@ export class PartnerService {
   }
 
   getPartnerById(partnerId: number): Observable<string> {
-    return this.httpWrap.get("http://localhost:8081/partner/partnerRoom?partnerId=" + partnerId)
+    return this.httpWrap.get("http://localhost:8081/partner/partnerRoom/" + partnerId)
       .map((response: Response) => response.text());
   }
 
   getPartnerImage(partnerId: number): Observable<string> {
-    return this.httpWrap.get('http://localhost:8081/partner/accountImage?partnerId=' + partnerId)
+    return this.httpWrap.get('http://localhost:8081/partner/accountImage/' + partnerId)
       .map((response: Response) => response.text());
   }
 
@@ -42,6 +42,7 @@ export class PartnerService {
            .map((response: Response) => response.text())
 
   }
+
 
 
 }

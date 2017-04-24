@@ -1,10 +1,101 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+<button pButton type="button" label="Go My Account" (click)="goToMyAccount()"></button>
+<button pButton type="button" label="Unaccepted reservations"></button>
+<div style="margin: 0 auto; display: block; width: 45%;height: 50%;">
+  <p-schedule [events]="getSchedule()"
+              [header]="header"
+              [editable]="true"
+              [nowIndicator]="true"
+              (onEventClick)="onEventClickHandler($event)"
+              (onDayClick)="onDayClickHandler($event)">
+  </p-schedule>
 
-</body>
-</html>
+</div>
+
+
+<p-dialog header="Event Details" [visible]="showEventDetails()"
+          [closable]="true" [closeOnEscape]="true" [responsive]="true" showEffect="fade"
+          [modal]="false"
+          [contentStyle]="{'overflow':'visible'}"
+          [style]="{'overflow':'visible'}">
+  <p-header style="display:none;">
+  </p-header>
+  <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="selectedRequest()">
+    <div class="ui-grid-row">
+      <div class="ui-grid-col-4"><label>Description:</label></div>
+      <div class="ui-grid-col-8">
+        <div>
+          {{selectedRequest().description}}
+        </div>
+      </div>
+    </div>
+    <div class="ui-grid-row">
+      <div class="ui-grid-col-4"><label>Start:</label></div>
+      <div class="ui-grid-col-8">
+        <div>{{selectedRequest().startTime}}</div>
+      </div>
+    </div>
+    <div class="ui-grid-row">
+      <div class="ui-grid-col-4"><label>End:</label></div>
+      <div class="ui-grid-col-8">
+        <div>{{selectedRequest().endTime | date}}</div>
+      </div>
+    </div>
+  </div>
+  <p-footer>
+    <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+      <button pButton type="button" label="Delete reservation" (click)="deleteEvent()"></button>
+      <button pButton type="button" label="Close reservation" (click)="closeEventDetails()"></button>
+    </div>
+  </p-footer>
+</p-dialog>
+
+<p-dialog [visible]="createEvent()" [closable]="true"
+          [modal]="false"
+          [contentStyle]="{'overflow':'visible'}"
+          [style]="{'overflow':'visible'}">
+  <p-header style="display:none !important;">
+  </p-header>
+  <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="selectedRequest()">
+    <div class="ui-grid-row">
+      <div class="ui-grid-col-4"><label>Description:</label></div>
+      <div class="ui-grid-col-8">
+
+        <input type="text" pInputText id="reservationTitleInputId" [(ngModel)]="newRequest().description"
+               field="newRequest().description"/>
+
+      </div>
+    </div>
+    <div class="ui-grid-row">
+      <div class="ui-grid-col-4"><label>Start Day:</label></div>
+      <div class="ui-grid-col-8">
+        <p-calendar [showTime]="true" [(ngModel)]="newRequest().startTime" dateFormat="dd/mm/yy"
+                    disabled="true"></p-calendar>
+      </div>
+
+    </div>
+    <div class="ui-grid-row">
+      <div class="ui-grid-col-4"><label>Start Time:</label></div>
+      <div class="ui-grid-col-8">
+        <p-calendar [(ngModel)]="newRequest().newRequestStartTime" [timeOnly]="true"></p-calendar>
+
+      </div>
+    </div>
+
+    <div class="ui-grid-row">
+      <div class="ui-grid-col-4"><label>Duration in miuites:</label></div>
+      <div class="ui-grid-col-8">
+        <input type="text" pInputText id="durationInputId" [(ngModel)]="newRequest().duration"
+               field="newRequest().duration"/>
+      </div>
+    </div>
+
+  </div>
+  <p-footer>
+    <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+      <button pButton type="button" label="Add reservation" (click)="addCustomEvent()"></button>
+      <button pButton type="button" label="Cancel" (click)="cancelAddingCustomEvent()"></button>
+
+    </div>
+  </p-footer>
+</p-dialog>
+
