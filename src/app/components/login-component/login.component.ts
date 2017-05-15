@@ -3,6 +3,9 @@
  */
 import {Component, OnInit} from "@angular/core";
 import {Router} from "@angular/router";
+import {PartnerService} from "../../_services/partner.service";
+import {Partner} from "../../_models/partner.model";
+import {ConverterUtils} from "../../_commonServices/converter.service";
 
 @Component({
   moduleId: module.id,
@@ -11,41 +14,37 @@ import {Router} from "@angular/router";
   styleUrls: ['login.component.css']
 })
 export class LoginComponent implements OnInit {
-  model: any = {};
   loading = false;
+  _partnerModel: Partner = <Partner>{};
+  private _isShortTelephone: boolean = false;
+  private _wrongpartner: boolean = false;
+  private _isInvalidPassword: boolean = false;
 
   ngOnInit(): void {
   }
 
-  /*constructor(private clientService: ClientService,
-   private authenticationService: AuthenticationService) {
-   this.userTypeProvider = new UserTypeItems();
-   }
+  constructor( private router: Router,private partnerService: PartnerService) {
 
+  }
 
-   ngOnInit(): void {
-   this.userTypeProvider.initItems();
-   }
+  signin():void{
+    this.partnerService.signin(this._partnerModel).subscribe(
+      data => {
 
-   login() {
-   this.loading = true;
-   this.userTypeProvider.isCLient ? this.clientLogin() : {};
-   }
-
-   clientLogin(): void {
-   this.clientService.signin(this.model)
-   .subscribe(
-   (responseString: string) => {
-   this.authenticationService.login(responseString, true);
-   });
-   }
-
-   getUserTypes(): MenuItem[] {
-   return this.userTypeProvider.items;
-   }
-
-   getStartIndexOfUserTypes(): number {
-   return this.userTypeProvider._activeIndex;
-   }*/
+        if(<boolean>JSON.parse(data)["isShortTelephone"]){
+          this._isShortTelephone = JSON.parse(data)["isShortTelephone"] === 'true';
+        }
+        if(<boolean>JSON.parse(data)["isInvalidPassword"]) {
+          this._isInvalidPassword = JSON.parse(data)["isInvalidPassword"]=== 'true';
+        }
+        if(<boolean>JSON.parse(data)["wrongpartner"]) {
+          this._wrongpartner = JSON.parse(data)["wrongpartner"] === 'true';
+        }
+        if(!this._isShortTelephone && !this._isInvalidPassword && !this._wrongpartner) {
+          this._partnerModel.id = +ConverterUtils.partnerIdFromJson(data);
+          this.partnerService.getAndPutToken(this._partnerModel);
+        }
+      });
+  }
 }
 

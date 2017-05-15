@@ -1,0 +1,41 @@
+// lang-es.ts
+
+export const LANG_AM_NAME = 'am';
+
+export const LANG_AM_TRANS = {
+  'signout': 'Դուրս գալ',
+  'myrequest_tabname' : 'Ամրագրումներ',
+  'favorites_tabname' : 'Նախընտրածներ',
+  'unacceptedrequests_tabname' : 'Չհաստատված',
+  'acceptedrequests_tabname' : 'Հաստատված',
+  'donerequests_tabname' : 'Կատարված',
+  'name':'Անուն',
+  'telephone': 'Հեռախոս',
+  'password':'Գաղտնաբառ',
+  'service': 'Ծառայություն',
+  'signin':'Մուտք',
+  'signup': 'Գրանցվել',
+  'username': 'Username',
+  'address': 'Հասցե',
+  'feedbacks': 'Կարծիքներ',
+  'images': 'Նկարներ',
+  'notices': 'Նշումներ',
+  'followers': 'Հետևորդներ',
+  'averageRate': 'Գնահատական',
+  'startTime': 'Սկիզբ',
+  'description': 'Նկարագրություն',
+  'status': 'Վիճակը',
+  'responseText': 'Պատասխան',
+  'duration': 'Տևողություն',
+  'endTime': 'Ավարտ',
+  'morephotosbtnlabel': 'Նայել նկարներ',
+  'reservebtnlabel':'Ամրագրել',
+  'followbtnlabel':'Հետևել',
+  'callbtnlabel': 'Զանգել հիմա',
+  'distance': 'Հեռավորությունը',
+  'schedule_tabname': 'Իմ գրաֆիկը',
+  'newrequests_tabname': 'Նոր ամրագրումներ',
+  'backtopartnerdetails': 'Գնալ իմ էջ',
+  'cancelbtnlabel': 'Չեղարկել',
+  'savebtnlabel': 'Հիշել'
+};

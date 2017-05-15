@@ -4,6 +4,8 @@ import {HttpWrap} from "../_commonServices/httpWrap.service";
 import {Observable} from "rxjs";
 import {Response} from "@angular/http";
 import {ConverterUtils} from "../_commonServices/converter.service";
+import {ClientService} from "./client.service";
+import {ServiceUrlProvider} from "../_commonServices/mode-resolver.service";
 
 
 @Injectable()
@@ -12,18 +14,35 @@ export class ScheduleService {
 
   private _schedule: any[] = [];
   private _requests: Request[] = [];
+  private _newRequests: Request[] = [];
+
   private _selectedEvent: Request = <Request>{};
 
   private _showEventDetails: boolean = false;
 
+  private _autoAcceptedRequest: Request = <Request>{};
 
   private _creatingEventDetails: boolean = false;
 
-  constructor(private httpWrap: HttpWrap) {
-
+  constructor(private httpWrap: HttpWrap, private clientService: ClientService) {
   }
 
 
+  get requests(): Request[] {
+    return this._requests;
+  }
+
+  set requests(value: Request[]) {
+    this._requests = value;
+  }
+
+  get newRequests(): Request[] {
+    return this._newRequests;
+  }
+
+  set newRequests(value: Request[]) {
+    this._newRequests = value;
+  }
 
   get customRequest(): Request {
     return this._customRequest;
@@ -69,33 +88,26 @@ export class ScheduleService {
     this._creatingEventDetails = value;
   }
 
-  addEvent(request: Request): void {
-    this.saveReservation(request).subscribe((data:string)=>{
-      this.initReservationsForPartner(request.partnerId);
-      this.creatingEventDetails = false;
-      this.customRequest.newRequestStartTime = null;
-    });
+  addEvent(request: Request): Observable<string> {
+    return this.saveReservation(request);
 
+
+  }
+
+  updateEvent(request: Request): Observable<string> {
+    return this.updateReservation(request);
 
   }
 
   handleEventClick(e) {
     this.selectedEvent = <Request>{};
+
     this.selectedEvent.description = e.calEvent.title;
-
-    let start = e.calEvent.start;
-    let end = e.calEvent.end;
-    if (e.view.name === 'month') {
-      start.stripTime();
-    }
-
-    if (end) {
-      end.stripTime();
-      this.selectedEvent.endTime = end.format();
-    }
-
     this.selectedEvent.id = e.calEvent.id;
-    this.selectedEvent.startTime = start.format();
+    this.selectedEvent.startTime = e.calEvent.start;
+    this.selectedEvent.endTime = e.calEvent.end;
+    this.selectedEvent.clientId = e.calEvent.clientId;
+    this.selectedEvent.partnerId = e.calEvent.partnerId;
     this.showEventDetails = true;
   }
 
@@ -110,10 +122,7 @@ export class ScheduleService {
 
 
   deleteEvent() {
-
-      this.deleteReservation(this.selectedEvent.id)
-
-
+    this.deleteReservation(this.selectedEvent.id)
   }
 
 
@@ -129,35 +138,56 @@ export class ScheduleService {
     return index;
   }
 
-  initReservationsForPartner(partnerId: number): void {
-    this.getReservationsForPartner(partnerId).subscribe(
+  initReservationsForPartner(partnerId: number, status: number): void {
+    this.getReservationsForPartner(partnerId, status).subscribe(
       (data: string) => {
-        this._requests = ConverterUtils.reservationsFromJson(data);
-        for (let request of this._requests) {
-          let endOfRequest = request.startTime.getMinutes() + +request.duration;
-          request.endTime = new Date(request.startTime);
-          request.endTime.setMinutes(endOfRequest);
-          this.schedule.push({
-              "id": request.id,
-              "clientId": request.clientId,
-              "title": request.description,
-              "start": request.startTime,
-              "end": request.endTime,
-              "status": request.status,
-              "responseText": request.responseText,
-              "duration":request.duration
-            }
-          )
+        let requests: Request[] = ConverterUtils.reservationsFromJson(data);
+        if (status === 1) {
+          this.initSchedule(requests);
+        } else if (status === 2) {
+          this.initNewRequests(requests);
         }
-
       }
     );
   }
 
-  initReservationsForClient(clientId: number): void {
-    this.getReservationsForClient(clientId).subscribe(
+  initSchedule(resquests: Request[]): void {
+    this._requests = resquests;
+    this.schedule = [];
+    for (let request of this._requests) {
+      let endOfRequest = request.startTime.getMinutes() + +request.duration;
+      request.endTime = new Date(request.startTime);
+      request.endTime.setMinutes(endOfRequest);
+      this.schedule.push({
+          "id": request.id,
+          "clientId": request.clientId,
+          "title": request.description,
+          "start": request.startTime,
+          "end": request.endTime,
+          "status": request.status,
+          "responseText": request.responseText,
+          "duration": request.duration
+        }
+      )
+    }
+  }
+
+  initNewRequests(requests: Request[]): void {
+    this._newRequests = requests;
+    for (let request of this._newRequests) {
+      this.clientService.getClientMainDetailsById(request.clientId).subscribe(
+        data => {
+          request.client = ConverterUtils.getClientFromJsonString(data);
+        }
+      );
+    }
+  }
+
+  initReservationsForClient(clientId: number, status: number): void {
+    this.getReservationsForClient(clientId, status).subscribe(
       (data: string) => {
         this._requests = ConverterUtils.reservationsFromJson(data);
+        this.schedule = [];
         for (let request of this._requests) {
           let endOfRequest = request.startTime.getMinutes() + +request.duration;
           request.endTime = new Date(request.startTime);
@@ -170,7 +200,7 @@ export class ScheduleService {
               "end": request.endTime,
               "status": request.status,
               "responseText": request.responseText,
-              "duration":request.duration
+              "duration": request.duration
             }
           )
         }
@@ -180,28 +210,42 @@ export class ScheduleService {
   }
 
 
-  getReservationsForPartner(partnerId: number): Observable<string> {
-    return this.httpWrap.get('http://localhost:8081/partner/reservationsforpartner/' + partnerId)
+  getReservationsForPartner(partnerId: number, status: number): Observable<string> {
+    return this.httpWrap.get(ServiceUrlProvider.getPartnerServiceUrl() + 'partner/reservationsforpartner/' + partnerId + '/' + status)
       .map((response: Response) => response.text());
 
   }
 
 
-  getReservationsForClient(clientId: number): Observable<string> {
-    return this.httpWrap.get('http://localhost:8081/partner/reservationsforclient/' + clientId)
+  getReservationsForClient(clientId: number, status: number): Observable<string> {
+    return this.httpWrap.get(ServiceUrlProvider.getPartnerServiceUrl() + 'partner/reservationsforclient/' + clientId + '/' + status)
       .map((response: Response) => response.text());
 
   }
 
   saveReservation(request: Request): Observable<string> {
-    let data: string = JSON.stringify(request);
-    return this.httpWrap.post('http://localhost:8081/partner/addReserve', data)
+    let requesNew: Request = new Request(request.id, request.clientId, request.partnerId,
+      request.startTime, request.description, request.status,
+      request.responseText, request.duration, request.serviceId);
+
+    let data: string = requesNew.toJsonString();
+    return this.httpWrap.post(ServiceUrlProvider.getPartnerServiceUrl() + 'partner/addReserve', data)
+      .map((response: Response) => response.text());
+  }
+
+  updateReservation(request: Request): Observable<string> {
+    let requesNew: Request = new Request(request.id, request.clientId, request.partnerId,
+      request.startTime, request.description, request.status,
+      request.responseText, request.duration, request.serviceId);
+    let data: string = requesNew.toJsonString();
+    return this.httpWrap.post(ServiceUrlProvider.getPartnerServiceUrl() + 'partner/updateReserve', data)
       .map((response: Response) => response.text());
   }
 
   deleteReservation(requestId: number): void {
-    this.httpWrap.delete('http://localhost:8081/partner/deletereserve/' + requestId)
+    this.httpWrap.delete(ServiceUrlProvider.getPartnerServiceUrl() + 'partner/deletereserve/' + requestId)
       .map((response: Response) => response.text()).subscribe(data => {
+
       let index: number = this.findEventIndexById(requestId);
       if (index >= 0) {
         this.schedule.splice(index, 1);

@@ -1,21 +1,46 @@
-<div class="col-md-6 col-md-offset-3">
-  <h2>Գրանցվիր եթե որակդ ակնհայտ է</h2>
-  <form name="form" (ngSubmit)="providerForm.form.valid && register()" #providerForm="ngForm" novalidate>
-    <div [ngClass]="{ 'has-error': providerForm.submitted && !firstName.valid }">
-      <label for="firstName">Ձեր անունը</label>
-      <input type="text" name="firstName" [(ngModel)]="model.firstName" #firstName="ngModel" required/>
-      <div *ngIf="providerForm.submitted && !firstName.valid" class="help-block">Անունը գրելը պարտադիր է</div>
-    </div>
-    <p-dropdown [options]="services" [(ngModel)]="selectedService"></p-dropdown>
-    <div [ngClass]="{ 'has-error': providerForm.submitted && !password.valid }">
-      <label for="password">Գաղտնաբառ</label>
-      <input type="password" name="password" [(ngModel)]="model.password" #password="ngModel" required/>
-      <!--     <div *ngIf="providerForm.submitted && !password.valid" class="help-block">Գատնաբառը պարտադիր է</div>
-     -->    </div>
-    <div class="form-group">
-      <button [disabled]="loading" *ngIf="!loading" (click)="register();">Միանալ Սոսոին</button>
-      <img *ngIf="loading"
-           src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
-    </div>
-  </form>
+<div>
+  <div>
+    <label for="firstNameId">Name</label><br/>
+    <input type="text" pInputText id="firstNameId" [(ngModel)]="_newPartner.name"
+           field="_newClient.name"/>
+    <div class="validation-error-block" *ngIf="_isInvalidName">Invalid name.</div>
+  </div>
+  <div>
+    <label for="telephoneId">Telephone</label><br/>
+    <input type="text" pInputText id="telephoneId" [(ngModel)]="_newPartner.telephone"
+           field="_newClient.telephone"/>
+    <div class="validation-error-block" *ngIf="_isShortTelephone">Invalid telephone.</div>
+    <div class="validation-error-block" *ngIf="_isDoubleTelephone">Telephone should be unique.</div>
+  </div>
+  <div>
+    <label for="telephoneId">Username</label><br/>
+    <input type="text" pInputText id="usernameId" [(ngModel)]="_newPartner.username"
+           field="_newClient.telephone"/>
+    <div class="validation-error-block" *ngIf="_isInvalidUsername">Invalid username.</div>
+    <div class="validation-error-block" *ngIf="_isDoubleUsername">Username should be unique.</div>
+  </div>
+  <div>
+    <label for="passwordId">Password</label><br/>
+    <input type="password" pInputText id="passwordId" [(ngModel)]="_newPartner.password"
+           field="_newClient.password"/>
+    <div class="validation-error-block" *ngIf="_isInvalidPassword">Invalid password.</div>
+  </div>
+  <div>
+    <label>General service</label><br/>
+    <p-dropdown [options]="servicesAsSelectItems" [(ngModel)]="selectedService" [style]="{'width':'100%'}"
+                placeholder="--Select a service--"></p-dropdown>
+    <div class="validation-error-block" *ngIf="_isInvalidServiceId">Service is required.</div>
+  </div>
+  <div>
+    <label>Are you reservable ?</label><br/>
+    <p-inputSwitch onLabel="Yes" offLabel="No" [(ngModel)]="_newPartner.reservable"></p-inputSwitch>
+  </div>
+  <div class="form-group">
+    <button pButton type="button" label="Signup" *ngIf="!loading" (click)="register()"
+            icon="fa-user-plus" iconPos="left"></button>
+
+    <img *ngIf="loading"
+         src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA=="/>
+  </div>
+
 </div>

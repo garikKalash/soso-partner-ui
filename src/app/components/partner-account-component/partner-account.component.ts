@@ -11,8 +11,14 @@ import {SelectItem} from "primeng/components/common/api";
 import {FileUploader} from "ng2-file-upload";
 import {FormControl} from "@angular/forms";
 import {AddressService} from "../../_services/address.service";
-import {MarkerManager, SebmGoogleMapMarker} from "angular2-google-maps/core";
 import {Headers} from "@angular/http";
+import {AuthenticationService} from "../../_services/authentication.service";
+import {PartnerServiceDetail} from "../../_models/partner-service-detail.model";
+import {EventListenerService} from "../../_services/event-listener.service";
+import {Event} from "../../_models/event.model";
+import {ScheduleService} from "../../_services/schedule.service";
+import {Request} from "../../_models/request.model";
+import {ServiceUrlProvider} from "../../_commonServices/mode-resolver.service";
 
 @Component({
   moduleId: module.id,
@@ -32,11 +38,22 @@ export class PartnerAccountComponent implements OnInit {
   private _averageRate: number = 2.5;
 
   private _isEditingPartnerMainDetails: boolean = false;
+  private _isWrongTelephone: boolean = false;
+
   private _isEditingPartnerNoticeDetails: boolean = false;
 
-  private services: Service[] = [];
-  private serviceSelectItems: SelectItem[] = [];
+  private mainServices: Service[] = [];
 
+  private serviceSelectItems: SelectItem[] = [];
+  private newSubServiceToPartner: PartnerServiceDetail = <PartnerServiceDetail>{};
+
+
+  private showingFeedbacks: boolean = false;
+  private showingNotices: boolean = false;
+  private showingPhotos: boolean = false;
+  private showingFollowers: boolean = false;
+  private showingAddress: boolean = false;
+  private showingServices: boolean = false;
 
   @ViewChild("search")
   private _searchElementRef: ElementRef;
@@ -46,15 +63,87 @@ export class PartnerAccountComponent implements OnInit {
               private partnerService: PartnerService,
               private classifierService: ClassifierService,
               private activatedRoute: ActivatedRoute,
-              private httpWrap: HttpWrap,
               private sanitizer: Sanitizer,
-              private addressService: AddressService,) {
+              private addressService: AddressService,
+              private eventListenerService: EventListenerService,
+              private authenticationService: AuthenticationService,
+              private scheduleService:ScheduleService) {
 
   }
 
-  safeImage(path:string){
-    if(path === undefined || path === null){
-      return this.sanitizer.sanitize(SecurityContext.URL, `/src/loading-25x25.gif`);
+
+  showFeedbacks(): void {
+    this.showingFeedbacks = true;
+  }
+
+  hideFeedbacks(): void {
+    this.showingFeedbacks = false;
+  }
+
+  showNotices(): void {
+    this.showingNotices = true;
+  }
+
+  hideNotices(): void {
+    this.showingNotices = false;
+  }
+
+  showPhotos(): void {
+    this.showingPhotos = true;
+  }
+
+  hidePhotos(): void {
+    this.showingPhotos = false;
+  }
+
+  closeNewRequests(): void {
+    this.eventListenerService.deleteNewEventsFromPartner();
+  }
+
+
+  showFollowers(): void {
+    this.showingFollowers = true;
+  }
+
+  hideFollowers(): void {
+    this.showingFollowers = false;
+  }
+
+  showAddress(): void {
+
+    this.addressService.initMapDetails(this._searchElementRef, this.partner.longitude, this.partner.latitude);
+    this.showingAddress = true;
+    google.maps.event.trigger($('#partnerAddressBlockId'), 'resize');
+
+  }
+
+  hideAddress(): void {
+    this.showingAddress = false;
+  }
+
+  showServices(): void {
+    this.showingServices = true;
+  }
+
+  hideServices(): void {
+    this.showingServices = false;
+  }
+
+  ngOnInit(): void {
+    this.authenticationService.checkUnSignedPartner();
+    this.initPartner();
+
+  }
+
+
+  resize(event: any): void {
+    google.maps.event.trigger($('#partnerAddressBlockId'), 'resize');
+  }
+
+
+  safeImage(path: string) {
+    if (path === undefined || path === null) {
+      return this.sanitizer.sanitize(SecurityContext.URL, `http://phylo.cs.mcgill.ca/assets/img/loading.gif`);
     }
     return this.sanitizer.sanitize(SecurityContext.URL, `${path}`);
   }
@@ -67,37 +156,51 @@ export class PartnerAccountComponent implements OnInit {
     return this.addressService.latitude;
   }
 
+
   mapZoom(): number {
     return this.addressService.zoom;
   }
-
-
-
 
   mapSearchControl(): FormControl {
     return this.addressService.searchControl;
   }
 
   changeAddress() {
-     this.addressService._isNeedChangeAddress = true;
+    google.maps.event.trigger($('#partnerAddressBlockId'), 'resize');
+    this.addressService._isNeedChangeAddress = true;
   }
 
-  editNotices(){
+  editNotices() {
     this._isEditingPartnerNoticeDetails = true;
     this.clonePartnerNoticesDetails();
   }
 
-  cancelNotices(){
+  putMyLocation(): void {
+    this.addressService.setCurrentPosition();
+    this.addressService.getAddressByCoordinates(this.addressService.latitude, this.addressService.longitude)
+      .subscribe(
+        data => {
+          for (let node of JSON.parse(data)["results"]) {
+            this._editedPartner.address = node.formatted_address;
+            break;
+          }
+
+        }
+      );
+
+  }
+
+
+  cancelNotices() {
     this._isEditingPartnerNoticeDetails = false;
     this._editedPartner.notices = null;
 
   }
 
-
-  saveNotice(){
-    let data =  JSON.stringify(this._editedPartner);
+  saveNotice() {
+    let data = JSON.stringify(this._editedPartner);
     this.partnerService.savePartnerNotices(data).subscribe(
-      data =>{
+      data => {
         this._partner.notices = this._editedPartner.notices;
         this._isEditingPartnerNoticeDetails = false;
       }
@@ -122,16 +225,10 @@ export class PartnerAccountComponent implements OnInit {
 
   }
 
-  needChangeAddress():boolean{
+
+  needChangeAddress(): boolean {
     return this.addressService._isNeedChangeAddress;
   }
-
-
-  ngOnInit(): void {
-    this.initPartner();
-  }
-
-
 
 
   private initPartner(): void {
@@ -140,18 +237,90 @@ export class PartnerAccountComponent implements OnInit {
       this.partnerService.getPartnerById(partnerId).subscribe(
         (responeJson: string) => {
           this._partner = ConverterUtils.partnerFromJson(responeJson);
-          this.setServiceNameById(this._partner.serviceId);
           this.initFileUploader();
           this.initPartnerPhotoUploader();
-          this.addressService.initMapDetails(this._searchElementRef,this._partner.longitude,this._partner.latitude);
-
+          this.initPartnerServices();
+          this.autoCheckRequestExisting();
+          setInterval(() => {
+            this.autoCheckRequestExisting()
+          }, 4 * 1000);
+          this.eventListenerService.autoCheckNewEvents(this._partner.id);
+          setInterval(() => {
+            this.eventListenerService.autoCheckNewEvents(this._partner.id);
+          }, 1000 * 10);
         });
     })
   }
 
+  private requestNow: Request = <Request>{};
+  private _thereIsNowRequest: boolean = false;
+  private _thereWasNewRequest: boolean = false;
+
+  completeReservation(): void {
+    this.requestNow.status = 3; //status of done requests
+    this.requestNow.partnerId = this.partner.id;
+    this.scheduleService.updateReservation(this.requestNow).subscribe(
+      data => {
+        this.scheduleService.initReservationsForPartner(this.partner.id,1);
+        this._thereIsNowRequest = false;
+      }
+    );
+  }
+
+
+  autoCheckRequestExisting() {
+    this._thereWasNewRequest = this._thereIsNowRequest;
+
+    this.requestNow = <Request>{};
+    this._thereIsNowRequest = false;
+    this.scheduleService.requests.forEach((event: Request) => {
+        if (this.isNowEvent(event)) {
+          this.requestNow = event;
+          this._thereIsNowRequest = true;
+        }
+      }
+    );
+    if(this._thereWasNewRequest && !this._thereIsNowRequest){
+      this.completeReservation();
+      this._thereWasNewRequest = false;
+    }
+  }
+
+  isNowEvent(event: Request): boolean {
+    let date: Date = new Date();
+    return date.getTime() > event.startTime.getTime() && date.getTime() < event.endTime.getTime();
+  }
+
+
+  initPartnerServices(): void {
+    this.partnerService.getPartnerServiceDetails(this.partner.id).subscribe(
+      data => {
+        this.partner.services = ConverterUtils.partnerServicesFromJson(data);
+        this.prepareServicesByMainId(this.partner.serviceId);
+      }
+    )
+  }
+
+  private _hasNewRequest: boolean;
+
+
+  get hasNewRequest(): boolean {
+    this._hasNewRequest = this.eventListenerService.thereIsNewEvent;
+    return this.eventListenerService.thereIsNewEvent;
+  }
+
+
+  set hasNewRequest(value: boolean) {
+    this._hasNewRequest = value;
+  }
+
+  newEvents(): Event[] {
+    return this.eventListenerService.newEvents;
+  }
+
   private initFileUploader(): void {
     this.accountImageUploader = new FileUploader({
-      url: "http://localhost:8081/partner/uploadAccountImage",
+      url: ServiceUrlProvider.getPartnerServiceUrl() + "partner/uploadAccountImage",
       additionalParameter: {"id": this._partner.id}
     });
     this.accountImageUploader.onCompleteAll = () => {
@@ -161,9 +330,10 @@ export class PartnerAccountComponent implements OnInit {
       this.uploadAccountImage();
     };
   }
-   private initPartnerPhotoUploader(): void {
+
+  private initPartnerPhotoUploader(): void {
     this.partnerPhotoUploader = new FileUploader({
-      url: "http://localhost:8081/partner/addImageToPartnier",
+      url: ServiceUrlProvider.getPartnerServiceUrl() + "partner/addImageToPartnier",
       additionalParameter: {"id": this._partner.id},
       removeAfterUpload: true,
     });
@@ -177,15 +347,13 @@ export class PartnerAccountComponent implements OnInit {
 
   }
 
-  uploadNewPhoto():void{
+  uploadNewPhoto(): void {
     for (let item of this.partnerPhotoUploader.queue) {
-      item.headers = new Headers({"Content-Type":"multipart/form-data"})
+      item.headers = new Headers({"Content-Type": "multipart/form-data"})
       item.upload();
     }
 
   }
-
-
 
 
   setAccountLogo(): void {
@@ -199,40 +367,76 @@ export class PartnerAccountComponent implements OnInit {
   getPartnerPhotos(): void {
     this.partnerService.getPartnerPhotos(this._partner.id)
       .subscribe((responseJson: string) => {
-        this._partner.images = ConverterUtils.getPartnerPhotosUrlsFromJsonString(responseJson);
+        this._partner.photoDtos = ConverterUtils.getPartnerPhotosFromJsonString(responseJson);
         this.partnerPhotoUploader.clearQueue();
       })
 
   }
 
 
-  setServiceNameById(id: number): void {
-    this.classifierService.getServices().subscribe((servicesJsonString: string) => {
-        this.services = ConverterUtils.servicesFromJson(servicesJsonString);
-        this.services.forEach((service: Service) => {
+  prepareServicesByMainId(id: number): void {
+    this.classifierService.getGeneralServices().subscribe((servicesJsonString: string) => {
+        this.mainServices = ConverterUtils.servicesFromJson(servicesJsonString);
+        this.mainServices.forEach((service: Service) => {
           if (service._id === id) {
             this._partner.serviceName = service._serviceName_arm;
+            this.classifierService.getServicesByParent(id).subscribe(
+              data => {
+                this.mainServices = ConverterUtils.servicesFromJson(data);
+                this.initServiceSelectItems();
+                for (let serviceOfPartner of this.partner.services) {
+                  for (let service of this.mainServices) {
+                    if (serviceOfPartner.serviceId === service._id) {
+                      serviceOfPartner.service = service;
+                      break;
+                    }
+                  }
+                }
+              }
+            );
           }
         });
       }
     );
-
   }
 
-  private initServices(): void {
-    this.classifierService.getServices()
-      .subscribe((servicesJsonString: string) => {
-          this.services = ConverterUtils.servicesFromJson(servicesJsonString);
-          this.initServiceSelectItems();
+
+  private isAbsenceService: boolean = false;
+  private isAbsenceDuration: boolean = false;
+
+  addService(): void {
+
+    if (!this.newSubServiceToPartner.service) {
+      this.isAbsenceService = true;
+    }
+    if (!this.newSubServiceToPartner.defaultduration || this.newSubServiceToPartner.defaultduration <= 0) {
+      this.isAbsenceDuration = true;
+    }
+
+    if (!this.isAbsenceDuration && !this.isAbsenceService) {
+      this.newSubServiceToPartner.serviceId = this.newSubServiceToPartner.service._id;
+      this.newSubServiceToPartner.partnerId = this.partner.id;
+      this.partnerService.savePartnerServiceDetails(this.newSubServiceToPartner).subscribe(
+        data => {
+          this.partner.services.push(this.newSubServiceToPartner);
+          this.newSubServiceToPartner = <PartnerServiceDetail>{};
+          this.isAbsenceDuration = false;
+          this.isAbsenceService = false;
         }
-      )
+      );
+    }
+
   }
+
 
   private initServiceSelectItems() {
+
     this.serviceSelectItems.push({label: '--Select Service--', value: null});
-    this.services.forEach((service: Service) => {
+    this.newSubServiceToPartner.service = this.serviceSelectItems[0].value;
+    for (let service of this.mainServices) {
       this.serviceSelectItems.push({label: service._serviceName_arm, value: service});
-    });
+    }
+
   }
 
   editPartnerMainInfo(): void {
@@ -252,8 +456,14 @@ export class PartnerAccountComponent implements OnInit {
   }
 
   saveMainInfo(): void {
-    this._isEditingPartnerMainDetails = false;
-    this.saveEditedMainInfo();
+    if (!this._editedPartner.telephone || this._editedPartner.telephone.length < 5) {
+      this._isWrongTelephone = true;
+    }
+    if (!this._isWrongTelephone) {
+      this._isEditingPartnerMainDetails = false;
+      this.saveEditedMainInfo();
+      this._isWrongTelephone = false;
+    }
   }
 
   private saveEditedMainInfo(): void {
@@ -287,21 +497,78 @@ export class PartnerAccountComponent implements OnInit {
     }
   }
 
-  goToMyOrders():void{
-    this.router.navigate(["partneraccount/schedule"],{queryParams: {partnerId:this.partner.id}});
+  goToMyOrders(): void {
+    this.router.navigate(["partneraccount/schedule"], {
+      queryParams: {
+        partnerId: this.partner.id,
+        serviceId: this.partner.serviceId
+      }
+    });
   }
 
-  addressMarkerDragEnd(event:any):void{
+  addressMarkerDragEnd(event: any): void {
     this.addressService.longitude = event.coords.lng;
     this.addressService.latitude = event.coords.lat;
-    this.addressService.getAddressByCoordinates( event.coords.lat, event.coords.lng)
+    this.addressService.getAddressByCoordinates(event.coords.lat, event.coords.lng)
       .subscribe(
-      data => {
-        for(let node of JSON.parse(data)["results"]){
-          this._editedPartner.address = node.formatted_address;
-          break;
-        }
+        data => {
+          for (let node of JSON.parse(data)["results"]) {
+            this._editedPartner.address = node.formatted_address;
+            break;
+          }
 
+        }
+      );
+  }
+
+  deletePartnerPhoto(photoId: number) {
+    this.partnerService.deletePartnerPhoto(photoId).subscribe(
+      () => {
+        this.partnerService.getPartnerPhotos(this.partner.id).subscribe(
+          data => {
+            this.partner.photoDtos = ConverterUtils.getPartnerPhotosFromJsonString(data);
+          }
+        )
+      }
+    )
+  }
+
+  logout(): void {
+    this.partnerService.logout(this.partner);
+  }
+
+  editInfoOfPartner(data: PartnerServiceDetail) {
+    data.isEditing = true;
+  }
+
+  deleteInfoOfPartner(data: PartnerServiceDetail) {
+    this.partnerService.deletePartnerServiceDetails(data.id).subscribe(
+      data => {
+        this.partnerService.getPartnerServiceDetails(this.partner.id).subscribe(
+          data => {
+            this.partner.services = ConverterUtils.partnerServicesFromJson(data);
+            for (let serviceOfPartner of this.partner.services) {
+              for (let service of this.mainServices) {
+                if (serviceOfPartner.serviceId === service._id) {
+                  serviceOfPartner.service = service;
+                  break;
+                }
+              }
+            }
+          }
+        )
+      }
+    )
+  }
+
+  cancelInfoOfPartner(data: PartnerServiceDetail) {
+    data.isEditing = false;
+  }
+
+  updatePartnerServiceDetail(data: PartnerServiceDetail) {
+    this.partnerService.updatePartnerServiceDetails(data).subscribe(
+      responseText => {
+        data.isEditing = false;
       }
     )
   }

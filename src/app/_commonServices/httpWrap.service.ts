@@ -17,6 +17,7 @@ export class HttpWrap{
 
   constructor(private http:Http){
     HttpWrap._headers.append('token','');
+    HttpWrap._headers.append('partnerId','');
   }
 
 

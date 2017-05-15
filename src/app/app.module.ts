@@ -15,9 +15,24 @@ import {ClassifierService} from "./_services/classifier.service";
 import {FileSelectDirective} from "ng2-file-upload";
 import {AgmCoreModule} from "angular2-google-maps/core";
 import {AddressService} from "./_services/address.service";
-import {InputTextModule,ScheduleModule,CalendarModule,DialogModule} from 'primeng/primeng';
 import {PartnerOrdersComponent} from "./components/partner-orders-component/partner-orders.component";
 import {ScheduleService} from "./_services/schedule.service";
+import {DataListModule} from "primeng/components/datalist/datalist";
+import {AuthenticationService} from "./_services/authentication.service";
+import {InputTextModule,ScheduleModule,CalendarModule,
+        DialogModule,TabViewModule,DropdownModule,InputSwitchModule} from 'primeng/primeng';
+import {ConnectToSystemComponent} from "./components/register-partner-component/connectToSystem.component";
+import {LoginComponent} from "./components/login-component/login.component";
+import {DataTableModule} from "primeng/components/datatable/datatable";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {EventListenerService} from "./_services/event-listener.service";
+import {ClientService} from "./_services/client.service";
+import {DataGridModule} from "primeng/components/datagrid/datagrid";
+import {RatingModule} from "ngx-rating";
+import {TranslateService} from "./translate/translate.service";
+import {TRANSLATION_PROVIDERS} from "./translate/translations";
+import {TranslatePipe} from "./translate/translate.pipe";
+
 
 
 @NgModule({
@@ -26,7 +41,10 @@ import {ScheduleService} from "./_services/schedule.service";
     WelcomePageComponent,
     PartnerAccountComponent,
     FileSelectDirective,
-    PartnerOrdersComponent
+    PartnerOrdersComponent,
+    ConnectToSystemComponent,
+    LoginComponent,
+    TranslatePipe
   ],
   imports: [
     AgmCoreModule.forRoot({
@@ -34,6 +52,7 @@ import {ScheduleService} from "./_services/schedule.service";
       libraries: ["places"]
     }),
     ReactiveFormsModule,
+    BrowserAnimationsModule,
     BrowserModule,
     routing,
     FormsModule,
@@ -42,7 +61,14 @@ import {ScheduleService} from "./_services/schedule.service";
     InputTextModule,
     ScheduleModule,
     CalendarModule,
-    DialogModule
+    DialogModule,
+    TabViewModule,
+    DataListModule,
+    DropdownModule,
+    InputSwitchModule,
+    DataTableModule,
+    DataGridModule,
+    RatingModule
   ],
   providers: [
     HttpWrap,
@@ -50,6 +76,11 @@ import {ScheduleService} from "./_services/schedule.service";
     ClassifierService,
     AddressService,
     ScheduleService,
+    AuthenticationService,
+    EventListenerService,
+    ClientService,
+    TranslateService,
+    TRANSLATION_PROVIDERS
   ],
   bootstrap: [AppComponent]
 })

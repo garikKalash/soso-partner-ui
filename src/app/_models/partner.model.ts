@@ -1,31 +1,11 @@
 import {Feedback} from "./feedback.model";
 import {Client} from "./client.model";
+import {PartnerServiceDetail} from "./partner-service-detail.model";
+import {Photo} from "./photo.model";
 /**
  * Created by Home on 3/4/2017.
  */
 export class Partner {
-  get reservable(): boolean {
-    return this._reservable;
-  }
-
-  set reservable(value: boolean) {
-    this._reservable = value;
-  }
-  get serviceName(): string {
-    return this._serviceName;
-  }
-
-  set serviceName(value: string) {
-    this._serviceName = value;
-  }
-
-  get imgpath(): string {
-    return this._imgpath;
-  }
-
-  set imgpath(value: string) {
-    this._imgpath = value;
-  }
   private _id: number;
   private _name: string;
   private _telephone: string;
@@ -35,7 +15,7 @@ export class Partner {
   private _password: string;
   private _address: string;
   private _feedbacks: Feedback[];
-  private _images: string[] = [];
+  private _photoDtos: Photo[] = [];
   private _notices: string;
   private _followers: string[];
   private _longitude: number;
@@ -43,6 +23,7 @@ export class Partner {
   private _imgpath: string;
   private _imgId: number;
   private _reservable:boolean;
+  private _services:PartnerServiceDetail[] = [];
 
   constructor(id: number,
               number: string,
@@ -64,6 +45,37 @@ export class Partner {
     this._latitude = latitude;
     this._notices = notices;
     this._reservable = reservable;
+  }
+
+  get reservable(): boolean {
+    return this._reservable;
+  }
+
+  set reservable(value: boolean) {
+    this._reservable = value;
+  }
+  get serviceName(): string {
+    return this._serviceName;
+  }
+
+  set serviceName(value: string) {
+    this._serviceName = value;
+  }
+
+  get services(): PartnerServiceDetail[] {
+    return this._services;
+  }
+
+  set services(value: PartnerServiceDetail[]) {
+    this._services = value;
+  }
+
+  get imgpath(): string {
+    return this._imgpath;
+  }
+
+  set imgpath(value: string) {
+    this._imgpath = value;
   }
 
   get longitude(): number {
@@ -106,12 +118,13 @@ export class Partner {
     this._feedbacks = value;
   }
 
-  get images(): string[] {
-    return this._images;
+
+  get photoDtos(): Photo[] {
+    return this._photoDtos;
   }
 
-  set images(value: string[]) {
-    this._images = value;
+  set photoDtos(value: Photo[]) {
+    this._photoDtos = value;
   }
 
   get notices(): string {

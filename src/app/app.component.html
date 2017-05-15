@@ -1,1 +1,9 @@
+<div class="btn-group">
+  <button *ngFor="let lang of supportedLanguages"
+          (click)="selectLang(lang.value)"
+          class="btn btn-default" [class.btn-primary]="isCurrentLang(lang.value)">
+    {{ lang.display }}
+  </button>
+</div>
+
 <router-outlet></router-outlet>

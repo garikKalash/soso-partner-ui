@@ -30,6 +30,7 @@ export class AddressService{
 
   initMapDetails(searchElementRef:ElementRef, longitude:number, latitude:number):void {
     this.searchElementRef = searchElementRef;
+
     if(longitude != null && latitude !=null){
       this.latitude = latitude;
       this.longitude = longitude;
@@ -43,11 +44,15 @@ export class AddressService{
       this.setCurrentPosition();
     }
 
+
     //load Places Autocomplete
     this.mapsAPILoader.load().then(() => {
+
       let autocomplete = new google.maps.places.Autocomplete(searchElementRef.nativeElement, {
-        types: ["address"]
+        types: ["places"]
       });
+
+
       autocomplete.addListener("place_changed", () => {
         this.ngZone.run(() => {
           //get the place result
@@ -65,9 +70,10 @@ export class AddressService{
         });
       });
     });
+
   }
 
-  private setCurrentPosition() :void{
+  setCurrentPosition() :void{
     if ("geolocation" in navigator) {
       navigator.geolocation.getCurrentPosition((position) => {
         this.latitude = position.coords.latitude;

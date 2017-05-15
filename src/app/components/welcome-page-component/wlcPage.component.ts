@@ -1,5 +1,6 @@
 import {Component, OnInit} from "@angular/core";
 import {Router} from "@angular/router";
+import {AuthenticationService} from "../../_services/authentication.service";
 /**
  * Created by Garik.Kalashyan on 1/5/2017.
  */
@@ -11,18 +12,22 @@ import {Router} from "@angular/router";
   styleUrls: ['wlcPage.component.css']
 })
 export class WelcomePageComponent implements OnInit{
-  constructor(
-    private router: Router){}
+  private _isSigningUser:boolean = false;
+  private _isSignupingUser:boolean = false;
 
-  registerPartner() {
-    this.router.navigate(["/partneraccount"]);
+
+  constructor(private router: Router,private authenticationService:AuthenticationService){}
+
+  showSigninDialog(){
+    this._isSigningUser = true;
+  }
+
+  showSignupDialog(){
+    this._isSignupingUser = true;
   }
 
   ngOnInit(): void {
-    this.router.navigate(["/partneraccount"],{queryParams: {partnerId:1}});
+    this.authenticationService.checkSignedPartner();
   }
 
-  signin(){
-    this.router.navigate(["/register"],{queryParams: {partnerId:1}});
-  }
 }

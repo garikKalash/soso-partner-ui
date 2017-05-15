@@ -1,20 +1,11 @@
-<!--<div class="main-app-div">
-  <div class="form-inline">
-    <button class="form-control soso-button welcome-page-button-main-class" (click)="goHomePage()">ՍՈՍՈ</button>
-  </div>
-  <div>
-    <login-component></login-component>
-  </div>
-  <div>
-    <button class="form-control soso-button " (click)="connectToSystemPopUp.open()">Միանալ ՍՈՍՈ-ին</button>
-  </div>
 
-  <modal class="soso-popup"
-         #connectToSystemPopUp [hideCloseButton]="true">
-    <modal-header style="display: none"></modal-header>
-    <modal-content>
-      <connect-to-system-component></connect-to-system-component>
-    </modal-content>
-    <modal-footer style="display: none"></modal-footer>
-  </modal>
-</div>-->
+<button pButton type="button" label="Signin" (click)="showSigninDialog()"></button>
+<button pButton type="button" label="Sign up" (click)="showSignupDialog()"></button>
+<p-dialog [(visible)]="_isSigningUser" [responsive]="true" showEffect="fade" [modal]="true"
+          [closable]="true">
+  <login-component></login-component>
+</p-dialog>
+<p-dialog [(visible)]="_isSignupingUser" [responsive]="true" showEffect="fade" [modal]="true"
+          [closable]="true">
+  <connect-to-system-component></connect-to-system-component>
+</p-dialog>

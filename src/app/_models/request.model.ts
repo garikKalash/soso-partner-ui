@@ -1,20 +1,28 @@
+import {PartnerServiceDetail} from "./partner-service-detail.model";
+import {Client} from "./client.model";
 export class Request{
   private _id:number;
+
   private _clientId:number;
+  private _client:Client;
+
   private _partnerId:number;
   private _startTime:Date;
   private _description:string;
   private _status:number;
-  private _responseText:string;
+  private _responseText:string = "Welcome :)";
   private _duration:number;
   private _endTime:Date;
   private _newRequestStartTime : Date;
+  private _serviceId:number;
+  private _partnerServiceDetail:PartnerServiceDetail;
 
 
 
   constructor(id: number, clientId: number, partnerId:number,
               startTime: Date, description: string,
-              status: number, responseText: string, duration:number) {
+              status: number, responseText: string,
+              duration:number, serviceId:number) {
     this._id = id;
     this._clientId = clientId;
     this._partnerId = partnerId;
@@ -23,6 +31,7 @@ export class Request{
     this._status = status;
     this._responseText = responseText;
     this._duration = duration;
+    this._serviceId = serviceId;
   }
 
 
@@ -41,6 +50,32 @@ export class Request{
 
   set newRequestStartTime(value: Date) {
     this._newRequestStartTime = value;
+  }
+
+
+  get partnerServiceDetail(): PartnerServiceDetail {
+    return this._partnerServiceDetail;
+  }
+
+  set partnerServiceDetail(value: PartnerServiceDetail) {
+    this._partnerServiceDetail = value;
+  }
+
+
+  get client(): Client {
+    return this._client;
+  }
+
+  set client(value: Client) {
+    this._client = value;
+  }
+
+  get serviceId(): number {
+    return this._serviceId;
+  }
+
+  set serviceId(value: number) {
+    this._serviceId = value;
   }
 
   get id(): number {
@@ -107,4 +142,13 @@ export class Request{
   set responseText(value: string) {
     this._responseText = value;
   }
+  public  toJsonString(): string {
+    let json = JSON.stringify(this);
+    Object.keys(this).filter(key => key[0] === "_").forEach(key => {
+      json = json.replace(key, key.substring(1));
+    });
+
+    return json;
+  }
+
 }
