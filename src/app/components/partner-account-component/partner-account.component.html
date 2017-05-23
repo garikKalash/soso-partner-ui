@@ -1,23 +1,23 @@
 <div class="ui-grid ui-grid-responsive ui-fluid">
   <div class="ui-grid-row soso-partner-header">
     <div class="ui-grid-col-4 soso-partner-properties">
-      <p-splitButton label="My account" [style]="{'width':'45%'}" [model]="userProperties"></p-splitButton>
+      <p-splitButton label="{{'my_account'| translate}}" [style]="{'width':'45%'}" [model]="userProperties"></p-splitButton>
     </div>
     <div class="ui-grid-col-3 soso-partner-notification">
 
       <i class="fa fa-bell-o fa-2x soso-icon" aria-hidden="true" (click)="op.toggle($event)"></i>
       <div
-        style="height: 8px;width: 8px; border-radius: 10px; background-color: orange;margin-top: -20%;"
+        style="height: 8px;width: 8px; border-radius: 10px; background-color: orange;margin-top: -25%;"
         *ngIf="hasNewRequest"></div>
-      <p-overlayPanel #op [style]="{'width':'100%;'}">
-        <div *ngIf="hasNewRequest" (click)="closeNewRequests();goToMyOrders();">
-          You have new request please go workspace for more.
-        </div>
-        <div *ngIf="!hasNewRequest">
-          There aren't new events.
-        </div>
-      </p-overlayPanel>
     </div>
+    <p-overlayPanel #op [style]="{'width':'100%;'}">
+      <div *ngIf="hasNewRequest" (click)="closeNewRequests();goToMyOrders();">
+         {{'notificationmessage'|translate}}
+      </div>
+      <div *ngIf="!hasNewRequest">
+        {{'emptynewrequests'|translate}}
+      </div>
+    </p-overlayPanel>
   </div>
 </div>
 
@@ -36,12 +36,15 @@
   </div>
   <hr>
   <div class="soso-partner-details-info">
-    <p id="usernameId"><span class="bold-label">Username:</span>  {{partner.username}}</p>
-    <p><span class="bold-label">Name:</span> {{partner.name}}</p>
+    <p id="usernameId"><span class="bold-label">Username:</span> {{partner.username}}</p>
+    <p><span class="bold-label">{{'name'|translate}}:</span> {{partner.name}}</p>
     <div class="ui-grid-row">
-      <p class="bold-label">Telephone:</p>
-      <p *ngIf="!_isEditingPartnerMainDetails">{{partner.telephone}}   <span><i class="fa fa-pencil-square" *ngIf="!_isEditingPartnerMainDetails" aria-hidden="true"
-                                                                              (click)="editPartnerMainInfo()"></i></span></p>
+      <p class="bold-label">{{'telephone'| translate}}:</p>
+      <p *ngIf="!_isEditingPartnerMainDetails">{{partner.telephone}} <span><i class="fa fa-pencil-square"
+                                                                              *ngIf="!_isEditingPartnerMainDetails"
+                                                                              aria-hidden="true"
+                                                                              (click)="editPartnerMainInfo()"></i></span>
+      </p>
 
 
       <input type="text" pInputText *ngIf="_isEditingPartnerMainDetails" id="partnerNameId"
@@ -52,20 +55,24 @@
          (click)="cancelEditingMainInfo()"></i>
       <div class="validation-error-block" *ngIf="_isWrongTelephone">Telephone number is required.</div>
 
-  </div>
-    <p><span class="bold-label">Service:</span> {{partner.serviceName}}</p>
-    <p><span class="bold-label">Address:</span> {{partner.address}}  <span><i class="fa fa-pencil-square" aria-hidden="true" (click)="showAddress()"></i></span></p>
+    </div>
+    <p><span class="bold-label">{{'service' |translate}}:</span> {{partner.serviceName}}</p>
+    <p><span class="bold-label">{{'address' | translate}}:</span> {{partner.address}} <span><i class="fa fa-pencil-square"
+                                                                             aria-hidden="true"
+                                                                             (click)="showAddress()"></i></span></p>
   </div>
 
 
   <hr>
   <div style="display: block;">
-    <button pButton type="button" label="Feedbacks" class="soso-partner-property-button" (click)="showFeedbacks()"></button>
-    <button pButton type="button" label="Photos" class="soso-partner-property-button" (click)="showPhotos()"></button>
-    <button pButton type="button" label="Notice" class="soso-partner-property-button" (click)="showNotices()"></button>
+    <button pButton type="button" label="{{'feedbacks' | translate}}" class="soso-partner-property-button"
+            (click)="showFeedbacks()"></button>
+    <button pButton type="button" label="{{'images' | translate}}" class="soso-partner-property-button" (click)="showPhotos()"></button>
+    <button pButton type="button" label="{{'notices' | translate}}" class="soso-partner-property-button" (click)="showNotices()"></button>
     <!--<button pButton type="button" label="Followers" (click)="showFollowers()"></button>
     -->
-    <button pButton type="button" label="Services" class="soso-partner-property-button" (click)="showServices()"></button>
+    <button pButton type="button" label="{{'services' | translate}}" class="soso-partner-property-button"
+            (click)="showServices()"></button>
   </div>
 </div>
 
@@ -81,7 +88,7 @@
         <p *ngIf="!servicesOfPartner.isEditing">{{servicesOfPartner.service?._serviceName_arm}}</p>
       </ng-template>
     </p-column>
-    <p-column field="defaultduration" header="Duration">
+    <p-column field="defaultduration" header="{{'duration' | translate}}">
       <ng-template let-servicesOfPartner="rowData" pTemplate="body">
         <p *ngIf="!servicesOfPartner.isEditing">{{servicesOfPartner.defaultduration}}</p>
         <input type="text" pInputText *ngIf="servicesOfPartner.isEditing"
@@ -89,7 +96,7 @@
 
       </ng-template>
     </p-column>
-    <p-column field="price" header="Price">
+    <p-column field="price" header="{{'price' | translate}}">
       <ng-template let-servicesOfPartner="rowData" pTemplate="body">
         <p *ngIf="!servicesOfPartner.isEditing">{{servicesOfPartner.price}}</p>
         <input type="text" pInputText *ngIf="servicesOfPartner.isEditing"
@@ -98,34 +105,39 @@
     </p-column>
     <p-column header="Actions">
       <ng-template let-col let-servicesOfPartner="rowData" pTemplate="body">
-        <button pButton type="button" label="Delete" *ngIf="!servicesOfPartner.isEditing"
+        <button pButton type="button" label="{{'delete' | translate}}" *ngIf="!servicesOfPartner.isEditing"
                 (click)="deleteInfoOfPartner(servicesOfPartner)"></button>
-        <button pButton type="button" label="Edit" *ngIf="!servicesOfPartner.isEditing"
+        <button pButton type="button" label="{{'edit' | translate}}" *ngIf="!servicesOfPartner.isEditing"
                 (click)="editInfoOfPartner(servicesOfPartner)"></button>
-        <button pButton type="button" label="Save" *ngIf="servicesOfPartner.isEditing"
+        <button pButton type="button" label="{{'savebtnlabel' | translate}}" *ngIf="servicesOfPartner.isEditing"
                 (click)="updatePartnerServiceDetail(servicesOfPartner)"></button>
-        <button pButton type="button" label="Cancel" *ngIf="servicesOfPartner.isEditing"
+        <button pButton type="button" label="{{'cancelbtnlabel' | translate}}" *ngIf="servicesOfPartner.isEditing"
                 (click)="cancelInfoOfPartner(servicesOfPartner)"></button>
       </ng-template>
     </p-column>
   </p-dataTable>
-  <div class="ui-grid-row">
-    <div class="ui-grid-col-3">
-      <p-dropdown [options]="serviceSelectItems" [(ngModel)]="newSubServiceToPartner.service"
-                  [style]="{'width':'150px'}"></p-dropdown>
-      <div class="validation-error-block" *ngIf="isAbsenceService">Service is required.</div>
-    </div>
-    <div class="ui-grid-col-3">
-      <input type="text" pInputText id="defaultdurationId"
-             [(ngModel)]="newSubServiceToPartner.defaultduration" field="newSubServiceToPartner.defaultduration"/>
-      <div class="validation-error-block" *ngIf="isAbsenceDuration">Please specify motavor duration.</div>
-    </div>
-    <div class="ui-grid-col-3">
-      <input type="text" pInputText id="priceId"
-             [(ngModel)]="newSubServiceToPartner.price" field="newSubServiceToPartner.price"/>
-    </div>
-    <div class="ui-grid-col-3">
-      <button pButton type="button" label="Add" (click)="addService()"></button>
+  <div class="ui-grid ui-grid-responsive ui-fluid">
+    <div class="ui-grid-row">
+      <div class="ui-grid-col-3">
+        {{'service' | translate}}<br/>
+        <p-dropdown [options]="serviceSelectItems" [(ngModel)]="newSubServiceToPartner.service"
+                    [style]="{'width':'150px'}"></p-dropdown>
+        <div class="validation-error-block" *ngIf="isAbsenceService">Service is required.</div>
+      </div>
+      <div class="ui-grid-col-3">
+        {{'duration' | translate}}<br/>
+        <input type="text" pInputText id="defaultdurationId"
+               [(ngModel)]="newSubServiceToPartner.defaultduration" field="newSubServiceToPartner.defaultduration"/>
+        <div class="validation-error-block" *ngIf="isAbsenceDuration">Please specify motavor duration.</div>
+      </div>
+      <div class="ui-grid-col-3">
+        {{'price' | translate}}<br/>
+        <input type="text" pInputText id="priceId"
+               [(ngModel)]="newSubServiceToPartner.price" field="newSubServiceToPartner.price"/>
+      </div>
+      <div class="ui-grid-col-3">
+        <button pButton type="button" label="{{'add' | translate}}" (click)="addService()"></button>
+      </div>
     </div>
   </div>
 </p-dialog>
@@ -152,11 +164,11 @@
           (onAfterHide)="hideNotices()" [closable]="true">
   <div id="partnerNoticesBlockId">
     <div style="display: inline-block;">
-      <h2>Notice</h2>
-      <button pButton type="button" label="Edit" *ngIf="!_isEditingPartnerNoticeDetails"
+      <h2>{{'notices' | translate}}</h2>
+      <button pButton type="button" label="{{'edit' | translate}}" *ngIf="!_isEditingPartnerNoticeDetails"
               (click)="editNotices()"></button>
-      <button pButton type="button" label="Save" *ngIf="_isEditingPartnerNoticeDetails" (click)="saveNotice()"></button>
-      <button pButton type="button" label="Cancel" *ngIf="_isEditingPartnerNoticeDetails"
+      <button pButton type="button" label="{{'savebtnlabel' | translate}}" *ngIf="_isEditingPartnerNoticeDetails" (click)="saveNotice()"></button>
+      <button pButton type="button" label="{{'cancelbtnlabel' | translate}}" *ngIf="_isEditingPartnerNoticeDetails"
               (click)="cancelNotices()"></button>
     </div>
     <p *ngIf="!_isEditingPartnerNoticeDetails">{{partner.notices}}</p>
@@ -167,7 +179,7 @@
 <p-dialog [(visible)]="showingPhotos" [responsive]="true" showEffect="fade" [modal]="true" width="450"
           (onAfterHide)="hidePhotos()" [closable]="true">
   <div id="partnerPhotosBlockId">
-    <h2>Photos({{partner.photoDtos?.length}})</h2>
+    <h2>{{'images' | translate}}({{partner.photoDtos?.length}})</h2>
     <div *ngFor="let image of partner.photoDtos" style="display: inline-block; margin-right: 10px;">
       <i class="fa fa-trash-o" aria-hidden="true" (click)="deletePartnerPhoto(image.id)"></i>
       <img src="{{safeImage(image.image_path)}}"
@@ -200,15 +212,15 @@
   </p-header>
   <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="requestNow">
     <div class="ui-grid-row">
-      <label>Description:</label>
+      <label>{{'description' | translate}}:</label>
       {{requestNow.description}}
     </div>
     <div class="ui-grid-row">
-      <label>Start:</label>
+      <label>{{'startTime' | translate}}:</label>
       {{requestNow.startTime| date: 'MMM dd yy, HH:mm'}}
     </div>
     <div class="ui-grid-row">
-      <label>End:</label>{{requestNow.endTime | date: 'MMM dd yy, HH:mm'}}
+      <label>{{'endTime' | translate}}:</label>{{requestNow.endTime | date: 'MMM dd yy, HH:mm'}}
     </div>
   </div>
   <p-footer>
@@ -222,16 +234,16 @@
           (onAfterHide)="hideAddress()" [closable]="true">
 
   <div id="partnerAddressBlockId">
-    <h2>Address</h2>
+    <h2>{{'address' | translate}}</h2>
     <div id="addessMapBlockId">
-      <button pButton type="button" label="Change Address" *ngIf="!needChangeAddress()"
+      <button pButton type="button" label="{{'change_address' | translate}}" *ngIf="!needChangeAddress()"
               (click)="changeAddress()"></button>
-      <button pButton type="button" *ngIf="needChangeAddress()" label="Save Address"
+      <button pButton type="button" *ngIf="needChangeAddress()" label="{{'save' | translate}}"
               (click)="saveAddress()"></button>
       <button pButton type="button" (click)="putMyLocation()" *ngIf="needChangeAddress()" icon="fa-street-view"
               iconPos="left"></button>
 
-      <div id="" class="form-group">
+      <div class="form-group">
         <input placeholder="Գրիր հասցեդ․․․" autocorrect="off" [(ngModel)]="_editedPartner.address" autocapitalize="off"
                spellcheck="off" type="text" class="form-control" #search [formControl]="mapSearchControl()">
       </div>

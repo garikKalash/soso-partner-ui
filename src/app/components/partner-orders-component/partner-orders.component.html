@@ -1,156 +1,198 @@
 <div class="ui-grid ui-grid-responsive ui-fluid">
-  <div class="ui-grid-row">
-    <div style="margin-left: 40%;" class="ui-grid-col-4">
-      <span class="fa-lg" style="border-bottom:solid; border-width: medium; border-color: red;margin-right: 20px;" *ngIf="isInScheduleState">
-      <i class="fa fa-briefcase soso-icon" aria-hidden="true" (click)="goToSchedule()"></i>
-      Schedule
-    </span>
-      <span class="fa-lg" *ngIf="!isInScheduleState" style="margin-right: 20px;">
-      <i class="fa fa-briefcase soso-icon" aria-hidden="true" (click)="goToSchedule()"></i>
-        Schedule
-    </span>
-      <span class="fa-lg" style="border-bottom:solid; border-width: medium; border-color: red;" *ngIf="!isInScheduleState">
-      <i class="fa fa-list-ul soso-icon" aria-hidden="true" (click)="goToRequests()"></i>
-      New Requests
-    </span>
-      <span class="fa-lg" *ngIf="isInScheduleState">
-      <i class="fa fa-list-ul soso-icon" aria-hidden="true" (click)="goToRequests()"></i>
-      New Requests
-    </span>
+  <div class="ui-grid-row soso-partner-header">
+    <div class="ui-grid-row soso-properties-web">
+      <div class="ui-grid-col-8 soso-partner-features">
+        <span class="fa-lg" style="border-bottom:solid; border-width: medium; border-color: red;margin-right: 20px;"
+              *ngIf="isInScheduleState" (click)="goToSchedule()">
+        <i class="fa fa-briefcase soso-icon" aria-hidden="true" ></i>
+        {{'schedule' | translate}}
+      </span>
+        <span class="fa-lg" *ngIf="!isInScheduleState" style="margin-right: 20px;" (click)="goToSchedule()">
+        <i class="fa fa-briefcase soso-icon" aria-hidden="true" ></i>
+          {{'schedule' | translate}}
+      </span>
+        <span class="fa-lg" style="border-bottom:solid; border-width: medium; border-color: red;margin-right: 20px;" (click)="goToRequests()"
+              *ngIf="!isInScheduleState">
+        <i class="fa fa-list-ul soso-icon" aria-hidden="true"></i>
+        {{'new_requests' | translate}}
+      </span>
+        <span class="fa-lg" *ngIf="isInScheduleState" (click)="goToRequests()" style="margin-right: 20px;">
+        <i class="fa fa-list-ul soso-icon" aria-hidden="true" ></i>
+        {{'new_requests' | translate}}
+      </span>
 
+      </div>
+      <div class="ui-grid-col-4" style="right: 0">
+        <div class="ui-grid-row">
+          <span>
+            <p-splitButton label="{{'workspace' | translate}}" [style]="{'width':'120px;'}" [styleClass]="'soso-partner-user-properties'"
+                           [model]="userProperties"></p-splitButton>
+          </span>
+        </div>
+      </div>
     </div>
-    <div class="ui-grid-col-4">
-      <div  class="ui-grid-row">
-        <span>
-          <p-splitButton label="Workspace" [style]="{'width':'120px;'}" [model]="userProperties"></p-splitButton>
-        </span>
+    <div class="ui-grid-row soso-properties-mobile">
+      <div class="ui-grid-col-4">
+        <i class="fa fa-bars fa-2x" aria-hidden="true" style="color: #277fb3;"
+           (click)="mobileproeprties.toggle($event)"></i>
+        <p-overlayPanel [styleClass]="'soso-mobile-properties-content'" #mobileproeprties [style]="{'width':'50%;'}">
+           <span style="border-bottom:solid; border-width: medium; border-color: red;margin-right: 10px;"
+                 *ngIf="isInScheduleState">
+            <i class="fa fa-search" aria-hidden="true" style="color: #277fb3;"></i>
+            {{'schedule' | translate}}
+          </span>
+          <span *ngIf="!isInScheduleState" style="margin-right: 10px;"
+                (click)="goToSchedule();mobileproeprties.hide()">
+            <i class="fa fa-search" aria-hidden="true" style="color: #277fb3;"></i>
+              {{'schedule' | translate}}
+          </span>
+          <span style="border-bottom:solid; border-width: medium; border-color: red; margin-right: 10px;"
+                *ngIf="!isInScheduleState">
+          <i class="fa fa-list-ul" style="color: #277fb3;" aria-hidden="true"></i>
+              {{'new_requests' | translate}}
+          </span>
+          <span *ngIf="isInScheduleState" (click)="goToRequests();mobileproeprties.hide()">
+          <i class="fa fa-list-ul" style="color: #277fb3; " aria-hidden="true"></i>
+              {{'new_requests' | translate}}
+          </span>
+        </p-overlayPanel>
+      </div>
+      <div class="ui-grid-col-4">
+        <p-splitButton label="{{'workspace' | translate}}" [styleClass]="'soso-partner-user-properties'" [model]="userProperties"></p-splitButton>
       </div>
     </div>
   </div>
-
-
 </div>
-    <div *ngIf="isInScheduleState" class="scheduleBlock" >
-      <p-schedule [events]="getSchedule()"
-                  [header]="header"
-                  [editable]="true"
-                  defaultView="agendaDay"
-                  [eventLimit]="3"
-                  [allDaySlot]="false"
-                  (onEventClick)="onEventClickHandler($event)"
-                  (onDayClick)="onDayClickHandler($event)">
-      </p-schedule>
+<div *ngIf="isInScheduleState" class="scheduleBlock">
+  <p-schedule [events]="getSchedule()"
+              [header]="header"
+              [editable]="true"
+              defaultView="agendaDay"
+              [eventLimit]="3"
+              [allDaySlot]="false"
+              (onEventClick)="onEventClickHandler($event)"
+              (onDayClick)="onDayClickHandler($event)">
+  </p-schedule>
+</div>
+
+
+<p-dialog header="{{'event_details' | translate}}" [visible]="showEventDetails()"
+          [closable]="true" [closeOnEscape]="true" [responsive]="true" showEffect="fade"
+          [modal]="false"
+          [contentStyle]="{'overflow':'visible'}"
+          [style]="{'overflow':'visible'}">
+  <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="selectedRequest()">
+    <div class="ui-grid-row">
+      <label>{{'description' | translate}}:</label>
+      {{selectedRequest().description}}
+    </div>
+    <div class="ui-grid-row">
+      <label>{{'startTime' | translate}}:</label>
+      {{selectedRequest().startTime| date: 'MMM dd yy, HH:mm'}}
+    </div>
+    <div class="ui-grid-row">
+      <label>{{'endTime' | translate}}:</label>{{selectedRequest().endTime | date: 'MMM dd yy, HH:mm'}}
+    </div>
+    <hr>
+    <div>
+      {{'contact' | translate}}: {{selectedRequest()?.client?.telephone}}
+    </div>
+  </div>
+  <p-footer>
+    <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+      <button pButton type="button" label="{{'delete' | translate}}" (click)="deleteEvent()"></button>
+      <button pButton type="button" label="{{'close' | translate}}" (click)="closeEventDetails()"></button>
+    </div>
+  </p-footer>
+</p-dialog>
+
+<p-dialog header="{{'event_in_during' | translate}}" [visible]="_thereIsNowRequest"
+          [closable]="false" [closeOnEscape]="false" [responsive]="true" showEffect="fade"
+          [modal]="true"
+          [contentStyle]="{'overflow':'visible'}"
+          [style]="{'width':'100%','height':'100%'}">
+  <p-header style="display:none;">
+  </p-header>
+  <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="requestNow">
+    <div class="ui-grid-row">
+      <label>{{'description' | translate}}:</label>
+      {{requestNow.description}}
+    </div>
+    <div class="ui-grid-row">
+      <label>{{'startTime' | translate}}:</label>
+      {{requestNow.startTime| date: 'MMM dd yy, HH:mm'}}
+    </div>
+    <div class="ui-grid-row">
+      <label>{{'endTime' | translate}}:</label>{{requestNow.endTime | date: 'MMM dd yy, HH:mm'}}
+    </div>
+  </div>
+  <p-footer>
+    <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+      <button pButton type="button" label="{{'complete' | translate}}" (click)="completeReservation()"></button>
+    </div>
+  </p-footer>
+</p-dialog>
+
+<p-dialog [visible]="createEvent()" [closable]="true"
+          [modal]="false"
+          [contentStyle]="{'overflow':'visible'}"
+          [style]="{'overflow':'visible'}">
+  <p-header style="display:none !important;">
+  </p-header>
+  <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="selectedRequest()">
+    <div class="ui-grid-row">
+      <div class="ui-grid-col-4"><label>{{'description' | translate}}:</label></div>
+      <div class="ui-grid-col-8">
+
+        <input type="text" pInputText id="reservationTitleInputId" [(ngModel)]="newRequest().description"
+               field="newRequest().description"/>
+
+      </div>
+    </div>
+    <div class="ui-grid-row">
+      <div class="ui-grid-col-4"><label>{{'startDay' | translate}}:</label></div>
+      <div class="ui-grid-col-8">
+        <p-calendar [showTime]="true" [(ngModel)]="newRequest().startTime" dateFormat="dd/mm/yy"
+                    disabled="true"></p-calendar>
+      </div>
+
+    </div>
+    <div class="ui-grid-row">
+      <div class="ui-grid-col-4"><label>{{'startTime' | translate}}:</label></div>
+      <div class="ui-grid-col-8">
+        <p-calendar [(ngModel)]="newRequest().newRequestStartTime" [timeOnly]="true"></p-calendar>
+        <div class="validation-error-block" *ngIf="_crossedRequestStartNewRequest">Reserve with this duration is crossed
+          with reservation which is starting {{_crossedRequestStartNewRequest.startTime | date: 'MMM dd yy, HH:mm'}}
+          with duration {{_crossedRequestStartNewRequest?.duration}}.
+        </div>
+      </div>
     </div>
 
-
-    <p-dialog header="Event Details" [visible]="showEventDetails()"
-              [closable]="true" [closeOnEscape]="true" [responsive]="true" showEffect="fade"
-              [modal]="false"
-              [contentStyle]="{'overflow':'visible'}"
-              [style]="{'overflow':'visible'}">
-      <p-header style="display:none;">
-      </p-header>
-      <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="selectedRequest()">
-        <div class="ui-grid-row">
-          <label>Description:</label>
-          {{selectedRequest().description}}
-        </div>
-        <div class="ui-grid-row">
-          <label>Start:</label>
-          {{selectedRequest().startTime| date: 'MMM dd yy, HH:mm'}}
-        </div>
-        <div class="ui-grid-row">
-          <label>End:</label>{{selectedRequest().endTime | date: 'MMM dd yy, HH:mm'}}
+    <div class="ui-grid-row">
+      <div class="ui-grid-col-4"><label>{{'duration'|translate}}:</label></div>
+      <div class="ui-grid-col-8">
+        <input type="text" pInputText id="durationInputId" [(ngModel)]="newRequest().duration"
+               field="newRequest().duration"/>
+        <div class="validation-error-block" *ngIf="_isWrongDurationNewRequest">{{'isWrongDurationNewRequest'| translate}}</div>
+        <div class="validation-error-block" *ngIf="_crossedRequestDurationNewRequest">Reserve with this duration is
+          crossed with reservation which is starting {{_crossedRequestDurationNewRequest.startTime | date: 'MMM dd yy,HH:mm'}}
         </div>
       </div>
-      <p-footer>
-        <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
-          <button pButton type="button" label="Delete reservation" (click)="deleteEvent()"></button>
-          <button pButton type="button" label="Close reservation" (click)="closeEventDetails()"></button>
-        </div>
-      </p-footer>
-    </p-dialog>
+    </div>
 
-    <p-dialog header="Event in during" [visible]="_thereIsNowRequest"
-              [closable]="false" [closeOnEscape]="false" [responsive]="true" showEffect="fade"
-              [modal]="true"
-              [contentStyle]="{'overflow':'visible'}"
-              [style]="{'width':'100%','height':'100%'}">
-      <p-header style="display:none;">
-      </p-header>
-      <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="requestNow">
-        <div class="ui-grid-row">
-          <label>Description:</label>
-          {{requestNow.description}}
-        </div>
-        <div class="ui-grid-row">
-          <label>Start:</label>
-          {{requestNow.startTime| date: 'MMM dd yy, HH:mm'}}
-        </div>
-        <div class="ui-grid-row">
-          <label>End:</label>{{requestNow.endTime | date: 'MMM dd yy, HH:mm'}}
-        </div>
-      </div>
-      <p-footer>
-        <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
-          <button pButton type="button" label="Complete reservation" (click)="completeReservation()"></button>
-        </div>
-      </p-footer>
-    </p-dialog>
+  </div>
+  <p-footer>
+    <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+      <button pButton type="button" label="{{'add' | translate}}" (click)="addCustomEvent()"></button>
+      <button pButton type="button" label="{{'cancelbtnlabel' | translate}}" (click)="cancelAddingCustomEvent()"></button>
+    </div>
+  </p-footer>
+</p-dialog>
 
-    <p-dialog [visible]="createEvent()" [closable]="true"
-              [modal]="false"
-              [contentStyle]="{'overflow':'visible'}"
-              [style]="{'overflow':'visible'}">
-      <p-header   style="display:none !important;">
-      </p-header>
-      <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="selectedRequest()">
-        <div class="ui-grid-row">
-          <div class="ui-grid-col-4"><label>Description:</label></div>
-          <div class="ui-grid-col-8">
+<div *ngIf="!isInScheduleState">
 
-            <input type="text" pInputText id="reservationTitleInputId" [(ngModel)]="newRequest().description"
-                   field="newRequest().description"/>
-
-          </div>
-        </div>
-        <div class="ui-grid-row">
-          <div class="ui-grid-col-4"><label>Start Day:</label></div>
-          <div class="ui-grid-col-8">
-            <p-calendar [showTime]="true" [(ngModel)]="newRequest().startTime" dateFormat="dd/mm/yy"
-                        disabled="true"></p-calendar>
-          </div>
-
-        </div>
-        <div class="ui-grid-row">
-          <div class="ui-grid-col-4"><label>Start:</label></div>
-          <div class="ui-grid-col-8">
-            <p-calendar [(ngModel)]="newRequest().newRequestStartTime" [timeOnly]="true"></p-calendar>
-            <div class="validation-error-block" *ngIf="_crossedRequestStartNewRequest">Reserve with this duration is crossed with reservation which is starting {{_crossedRequestStartNewRequest.startTime | date: 'MMM dd yy, HH:mm'}} with duration {{_crossedRequestStartNewRequest?.duration}}.</div>
-          </div>
-        </div>
-
-        <div class="ui-grid-row">
-          <div class="ui-grid-col-4"><label>Duration in miuites:</label></div>
-          <div class="ui-grid-col-8">
-            <input type="text" pInputText id="durationInputId" [(ngModel)]="newRequest().duration"
-                   field="newRequest().duration"/>
-            <div class="validation-error-block" *ngIf="_isWrongDurationNewRequest">Please specify duration.</div>
-            <div class="validation-error-block" *ngIf="_crossedRequestDurationNewRequest">Reserve with this duration is crossed with reservation which is starting {{_crossedRequestDurationNewRequest.startTime | date: 'MMM dd yy, HH:mm'}}</div>
-          </div>
-        </div>
-
-      </div>
-      <p-footer>
-        <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
-          <button pButton type="button" label="Add reservation" (click)="addCustomEvent()"></button>
-          <button pButton type="button" label="Cancel" (click)="cancelAddingCustomEvent()"></button>
-        </div>
-      </p-footer>
-    </p-dialog>
-  <div *ngIf="!isInScheduleState">
-    <p-dataList [value]="losTnewRequests()" [paginator]="true" [rows]="5"
-                *ngIf="losTnewRequests().length != 0">
+  <div *ngIf="losTnewRequests().length != 0" class="soso-new-requests-block">
+    <p-dataList [value]="losTnewRequests()" [paginator]="true" [rows]="5">
 
       <ng-template let-newrequest pTemplate="item">
         <div class="ui-grid ui-grid-responsive ui-fluid"
@@ -159,65 +201,66 @@
             <div class="ui-grid-col-9">
               <div class="ui-grid ui-grid-responsive ui-fluid">
                 <div class="ui-grid-row">
-                  <div class="ui-grid-col-2">Name</div>
-                  <div class="ui-grid-col-8">{{newrequest.client?.name}}</div>
-                </div>
-                <div class="ui-grid-row">
-                  <div class="ui-grid-col-2">Telephone</div>
-                  <div class="ui-grid-col-8">{{newrequest.client?.telephone}}</div>
-                </div>
-                <div class="ui-grid-row">
-                  <div class="ui-grid-col-2">Start</div>
-                  <div class="ui-grid-col-8">{{newrequest.startTime | date: 'MMM dd yy, HH:mm'}}</div>
-                  <div class="validation-error-block" *ngIf="_crossedRequestStart">Reserve with this duration is crossed with reservation which is starting {{_crossedRequestStart?.startTime | date: 'MMM dd yy, HH:mm'}} with duration {{_crossedRequestStart?.duration}}</div>
+                  <div class="ui-grid-col-8">{{'name' | translate}}: {{newrequest.client?.name}}</div>
+                  <div class="ui-grid-col-8">{{'telephone' | translate}} {{newrequest.client?.telephone}}</div>
+                  <div class="ui-grid-col-8">{{'startTime' | translate}} {{newrequest.startTime | date: 'MMM dd yy, HH:mm'}}<br/>
+                    <div class="validation-error-block" *ngIf="_crossedRequestStart">Reserve with this duration is
+                      crossed
+                      with reservation which is starting {{_crossedRequestStart?.startTime | date: 'MMM dd yy, HH:mm'}}
+                      with duration {{_crossedRequestStart?.duration}}
+                    </div>
+                  </div>
 
-                </div>
-                <div class="ui-grid-row">
-                  <div class="ui-grid-col-2">Service</div>
-                  <div class="ui-grid-col-8">{{newrequest.partnerServiceDetail?.service?._serviceName_arm}}</div>
-                </div>
-              </div>
-            </div>
-            <div class="ui-grid-col-9">
-              <div class="ui-grid ui-grid-responsive ui-fluid">
-                <div class="ui-grid-col-8">
-                  <label>Duration in minuites:</label>
-                  <input type="text" pInputText id="durationForRequestId" [(ngModel)]="newrequest.duration"
-                         field="newrequest.duration" required/>
-                  <div class="validation-error-block" *ngIf="_isWrongDuration">Please specify duration.</div>
-                  <div class="validation-error-block" *ngIf="_crossedRequestDuration">Reserve with this duration is crossed with reservation which is startin {{_crossedRequestDuration?.startTime | date: 'MMM dd yy, HH:mm'}}</div>
-
-                </div>
-              </div>
-              <div class="ui-grid ui-grid-responsive ui-fluid">
-                <div class="ui-grid-col-8">
-                  <label>Message</label>
-                  <input type="text" pInputText id="responseForRequestId" [(ngModel)]="newrequest.responseText"
-                         field="newrequest.responseText" required/>
+                  <div class="ui-grid-col-8">{{'service' | translate}} {{newrequest.partnerServiceDetail?.service?._serviceName_arm}}
+                  </div>
                 </div>
               </div>
             </div>
 
-            <div class="ui-grid-col-9">
-              <div class="ui-grid ui-grid-responsive ui-fluid">
-
-                <div style="margin-top: auto;">
-                  <button pButton type="button" label="Accept" (click)="acceptRequest(newrequest)"></button>
-                </div>
-                <div style="margin-top: 15px;">
-                  <button pButton type="button" label="Decline" (click)="declineReservation(newrequest)"></button>
-                </div>
+          </div>
+          <hr>
+          <div class="ui-grid-row">
+            <div class="ui-grid-col-8">
+              <label>{{'duration' | translate}}:</label>
+              <input type="text" pInputText id="durationForRequestId" [(ngModel)]="newrequest.duration"
+                     field="newrequest.duration" required/>
+              <div class="validation-error-block" *ngIf="_isWrongDuration">Please specify duration.</div>
+              <div class="validation-error-block" *ngIf="_crossedRequestDuration">Reserve with this duration is
+                crossed with reservation which is starting {{_crossedRequestDuration?.startTime |  date: 'MMM dd yy,HH:mm'}}
               </div>
+
+            </div>
+
+            <div class="ui-grid-col-8">
+              <label>{{'message' | translate}}</label>
+              <input type="text" pInputText id="responseForRequestId" [(ngModel)]="newrequest.responseText"
+                     field="newrequest.responseText" required/>
+            </div>
+          </div>
+          <hr>
+          <div class="ui-grid-row">
+            <div class="ui-grid-col-4 soso-decide-request-btn">
+              <button pButton type="button" label="{{'accept' | translate}}" (click)="acceptRequest(newrequest)"
+                      class=" soso-accept-request"></button>
+
+            </div>
+            <div class="ui-grid-col-4 soso-decide-request-btn">
+              <button pButton type="button" label="{{'decline' | translate}}" (click)="declineReservation(newrequest)"
+                      class="soso-decide-request-btn soso-decline-request"></button>
             </div>
           </div>
         </div>
       </ng-template>
     </p-dataList>
   </div>
+  <div *ngIf="losTnewRequests().length === 0" class="soso-empty-requests-block">
+    {{'emptynewrequests' | translate}}
+  </div>
+</div>
 
 <p-dialog [(visible)]="hasNewRequest" [responsive]="true" showEffect="fade" [modal]="true" width="450">
-  <div>You have new request | count is: {{newEvents().length}}</div>
-  <button pButton type="button" label="OK" (click)="closeNewRequests()"></button>
+  <div> {{'popup_new_request' | translate}} {{newEvents().length}}</div>
+  <button pButton type="button" label="{{'ok' | translate}}" (click)="closeNewRequests()"></button>
 
 
 </p-dialog>

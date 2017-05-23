@@ -37,5 +37,31 @@ export const LANG_AM_TRANS = {
   'newrequests_tabname': 'Նոր ամրագրումներ',
   'backtopartnerdetails': 'Գնալ իմ էջ',
   'cancelbtnlabel': 'Չեղարկել',
-  'savebtnlabel': 'Հիշել'
+  'savebtnlabel': 'Հիշել',
+
+  //partner translates
+  'my_account':'Իմ էջը',
+  'notificationmessage':'Դուք ունեք նոր ամրագրումներ, խնդրում ենք այցելել աշխատանքային տիրույթ:',
+  'emptynewrequests':"Նոր ամրագրումներ չկան:",
+  'services':"Ծառայություններ",
+  'price':'Գին',
+  'actions':'Գործ-եր',
+  'delete':'Ջնջել',
+  'edit':'Փոխել',
+  'add':'Ավելացնել',
+  'change_address':'Փոխել հասցեն',
+  'schedule':'Գրաֆիկ',
+  'new_requests': 'Նոր ամրագրումներ',
+  'workspace':'Աշխատասենյակ',
+  'event_details':'Ամրագրման տվյալներ',
+  'contact': 'Կոնտակտային տվյալներ',
+  'close':'Փակել',
+  'complete':'Կատարված է',
+  'startDay':'Օրը',
+  'isWrongDurationNewRequest':'Խնդրում ենք մուտքագրել տևողություն',
+  'message': 'Հաղորդագրություն',
+  'accept' : 'Հաստատել',
+  'decline' : 'Մերժել',
+  'popup_new_request':'Դուք ունեք նոր ամրագրման հայտ, քանակն է՝',
+  'ok':'Լավ'
 };

@@ -37,7 +37,60 @@ export const LANG_EN_TRANS = {
   'newrequests_tabname': 'New Requests',
   'backtopartnerdetails': 'Go my details',
   'cancelbtnlabel': 'Cancel',
-  'savebtnlabel': 'Save'
+  'savebtnlabel': 'Save',
+  'welcomepagetext':'Welcome to SOSO :) For looking services please signin or join to our system.',
+  'wrongpassword': 'Invalid password.',
+  'wrongusername': 'Invalid phonenumber.',
+  'wrongdetails': 'Invalid password or phonenumber.',
+  'wrongname': 'Name should be contain more than 3 letters.',
+  'uniquetelephonemessage': 'Phone number should be unique.',
+  'my_location':'My location',
+  'soso':'Soso',
+  'emptyeventsmessage': " There aren't new events.",
+  'acceptedeventmessage':' has accepted your request :)',
+  'doneeventmessage':'You have done events please give your feedbacks.',
+  'minimumrateerrormessage':'Minimum rate is 1.',
+  'seeservices_btn_lbl':'See services',
+  'event_in_during':'Event in during',
+
+
+
+
+  //partner translates
+  'my_account':'My account',
+  'notificationmessage':'You have new request please go workspace for more.',
+  'emptynewrequests':"There aren't new requests.",
+  'services':"Services",
+  'price':'Price',
+  'actions':'Actions',
+  'delete':'Delete',
+  'edit':'Edit',
+  'add':'Add',
+  'change_address':'Change Address',
+  'schedule':'Schedule',
+  'new_requests': 'New requests',
+  'workspace':'Workspace',
+  'event_details':'Event Details',
+  'contact': 'Contact',
+  'close':'Close',
+  'complete':'Completed',
+  'startDay':'Day',
+  'isWrongDurationNewRequest':'Please specify duration.',
+  'message': 'Message',
+  'accept' : 'Accept',
+  'decline' : 'Decline',
+  'popup_new_request':'You have new request | count is:',
+  'ok':'OK'
+
+
+
+
+
+
+
+
+
+
 
 
 
