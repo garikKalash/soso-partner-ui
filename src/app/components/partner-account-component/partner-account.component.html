@@ -238,7 +238,7 @@
     <div id="addessMapBlockId">
       <button pButton type="button" label="{{'change_address' | translate}}" *ngIf="!needChangeAddress()"
               (click)="changeAddress()"></button>
-      <button pButton type="button" *ngIf="needChangeAddress()" label="{{'save' | translate}}"
+      <button pButton type="button" *ngIf="needChangeAddress()" label="{{'savebtnlabel' | translate}}"
               (click)="saveAddress()"></button>
       <button pButton type="button" (click)="putMyLocation()" *ngIf="needChangeAddress()" icon="fa-street-view"
               iconPos="left"></button>
@@ -247,7 +247,7 @@
         <input placeholder="Գրիր հասցեդ․․․" autocorrect="off" [(ngModel)]="_editedPartner.address" autocapitalize="off"
                spellcheck="off" type="text" class="form-control" #search [formControl]="mapSearchControl()">
       </div>
-      <sebm-google-map id="map" #map style="height:60% !important;" [latitude]="mapLatitude()"
+      <sebm-google-map id="map" #map style="height:200px !important;" [latitude]="mapLatitude()"
                        [longitude]="mapLongitude()"
                        [scrollwheel]="false"
                        [zoom]="mapZoom()">
