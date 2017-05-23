@@ -1,9 +1,23 @@
-<div class="btn-group">
-  <button *ngFor="let lang of supportedLanguages"
-          (click)="selectLang(lang.value)"
-          class="btn btn-default" [class.btn-primary]="isCurrentLang(lang.value)">
-    {{ lang.display }}
-  </button>
+<div class="soso-header">
+  <div  class="soso-logo" style="float: left">
+    <div class="soso-logo-text">SOSO<span style="font-size: small;">partner</span></div>
+  </div>
+  <div class="soso-languages-block">
+    <p-dropdown [options]="supportedLanguages"  [style]="{'width':'90px'}" [(ngModel)] = "selectedLang" (onChange)="selectLanguage()">
+      <ng-template let-lang pTemplate="item">
+        <div class="ui-helper-clearfix" style="position: relative;height: 25px;">
+          <img src="{{lang?.flagpath}}" style="width:24px;position:absolute;top:1px;left:5px"/>
+          <div style="font-size:14px;float:right;margin-top:4px">{{lang?.label}}</div>
+        </div>
+      </ng-template>
+    </p-dropdown>
+  </div>
+  <!-- <div class="btn-group" style="float: left;margin-right: 0">
+     <button *ngFor="let lang of supportedLanguages"
+             (click)="selectLang(lang.value)"
+             class="btn btn-default" [class.btn-primary]="isCurrentLang(lang.value)">
+       <img src="{{lang.flagpath}}">
+     </button>
+   </div>-->
 </div>
-
 <router-outlet></router-outlet>

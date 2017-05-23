@@ -48,8 +48,8 @@ export class AuthenticationService {
     return this.registerReq(partner);
   }
 
-  logout(partner: Partner): void {
-    this.logoutReq(partner).subscribe(
+  logout(id:number): void {
+    this.logoutReq(id).subscribe(
       () => {
         HttpWrap.getHeaders().set('token', '');
         HttpWrap.getHeaders().set('partnerId', '');
@@ -72,8 +72,8 @@ export class AuthenticationService {
       .map((response: Response) => response.text());
   }
 
-  private logoutReq(partner: Partner): Observable<string> {
-    return this.httpWrap.delete(this.myUrl + 'authenticateService/deleteToken/2/' + partner.id + '/' + HttpWrap.getHeaders().get('soso_partner_token'))
+  private logoutReq(id: number): Observable<string> {
+    return this.httpWrap.delete(this.myUrl + 'authenticateService/deleteToken/2/' + id + '/' + HttpWrap.getHeaders().get('soso_partner_token'))
       .map((response: Response) => response.text());
   }
 

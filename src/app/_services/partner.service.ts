@@ -89,8 +89,8 @@ export class PartnerService {
   return  this.authenticationService.signup(partner);
   }
 
-  logout(partner: Partner): void {
-    this.authenticationService.logout(partner);
+  logout(id: number): void {
+    this.authenticationService.logout(id);
   }
 
   getAndPutToken(partner:Partner){

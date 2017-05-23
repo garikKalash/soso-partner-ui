@@ -7,7 +7,7 @@ import {ConverterUtils} from "../../_commonServices/converter.service";
 import "rxjs/add/operator/map";
 import {Service} from "../../_models/service.model";
 import {ClassifierService} from "../../_services/classifier.service";
-import {SelectItem} from "primeng/components/common/api";
+import {SelectItem, MenuItem} from "primeng/components/common/api";
 import {FileUploader} from "ng2-file-upload";
 import {FormControl} from "@angular/forms";
 import {AddressService} from "../../_services/address.service";
@@ -43,6 +43,8 @@ export class PartnerAccountComponent implements OnInit {
   private _isEditingPartnerNoticeDetails: boolean = false;
 
   private mainServices: Service[] = [];
+
+  private userProperties:MenuItem[]=[];
 
   private serviceSelectItems: SelectItem[] = [];
   private newSubServiceToPartner: PartnerServiceDetail = <PartnerServiceDetail>{};
@@ -134,6 +136,8 @@ export class PartnerAccountComponent implements OnInit {
     this.initPartner();
 
   }
+
+
 
 
   resize(event: any): void {
@@ -241,6 +245,7 @@ export class PartnerAccountComponent implements OnInit {
           this.initPartnerPhotoUploader();
           this.initPartnerServices();
           this.autoCheckRequestExisting();
+          this.initUserProperties();
           setInterval(() => {
             this.autoCheckRequestExisting()
           }, 4 * 1000);
@@ -345,6 +350,17 @@ export class PartnerAccountComponent implements OnInit {
     };
 
 
+  }
+
+  private initUserProperties(){
+    this.userProperties = [
+      {label: 'Workspace', icon: 'fa fa-list-ul', command: () => {
+        this.goToMyOrders();
+      }},
+      {label: 'Sign Out', icon: 'fa fa-sign-out', command: () => {
+        this.logout();
+      }},
+    ];
   }
 
   uploadNewPhoto(): void {
@@ -534,7 +550,7 @@ export class PartnerAccountComponent implements OnInit {
   }
 
   logout(): void {
-    this.partnerService.logout(this.partner);
+    this.partnerService.logout(this.partner.id);
   }
 
   editInfoOfPartner(data: PartnerServiceDetail) {

@@ -10,6 +10,7 @@ import {ClassifierService} from "../../_services/classifier.service";
 import {Service} from "../../_models/service.model";
 import {EventListenerService} from "../../_services/event-listener.service";
 import {Event} from "../../_models/event.model";
+import {MenuItem} from "primeng/components/common/api";
 @Component({
   moduleId: module.id,
   templateUrl: './partner-orders.component.html',
@@ -20,7 +21,6 @@ export class PartnerOrdersComponent implements OnInit {
   private _partnerId: number;
   private _mainServiceId: number;
   private header: any = {left: 'prev,next today', center: 'title', right: 'agendaDay,agendaWeek,month'};
-
   private requestNow: Request = <Request>{};
   private _thereIsNowRequest: boolean = false;
 
@@ -39,6 +39,7 @@ export class PartnerOrdersComponent implements OnInit {
   ngOnInit(): void {
     this.authenticationService.checkUnSignedPartner();
     this.initReservationsForPartner();
+    this.initUserProperties();
 
   }
 
@@ -98,7 +99,7 @@ export class PartnerOrdersComponent implements OnInit {
     });
   }
 
-  private _thereWasNewRequest:boolean = false;
+  private _thereWasNewRequest: boolean = false;
 
   autoCheckRequestExisting() {
     this._thereWasNewRequest = this._thereIsNowRequest;
@@ -112,7 +113,7 @@ export class PartnerOrdersComponent implements OnInit {
         }
       }
     );
-    if(this._thereWasNewRequest && !this._thereIsNowRequest){
+    if (this._thereWasNewRequest && !this._thereIsNowRequest) {
       this.completeReservation();
       this._thereWasNewRequest = false;
     }
@@ -142,7 +143,7 @@ export class PartnerOrdersComponent implements OnInit {
     this.scheduleService.customRequest.startTime.setMinutes(this.scheduleService.customRequest.newRequestStartTime.getMinutes());
     this.scheduleService.addEvent(this.scheduleService.customRequest).subscribe((data: string) => {
       this._isWrongDurationNewRequest = JSON.parse(data)["isWrongDuration"] === 'true';
-      if(JSON.parse(data)["crossedRequestDuration"]){
+      if (JSON.parse(data)["crossedRequestDuration"]) {
 
       }
       this._crossedRequestDurationNewRequest = <Request>(JSON.parse(data)["crossedRequestDuration"]);
@@ -164,20 +165,44 @@ export class PartnerOrdersComponent implements OnInit {
   private _crossedRequestDuration: Request
   private _crossedRequestStart: Request;
 
+
   acceptRequest(request: Request): void {
     request.status = 1;
     this.scheduleService.updateEvent(request).subscribe(
       data => {
-        this._isWrongDuration = JSON.parse(data)["isWrongDuration"] === 'true';
-        this._crossedRequestDuration = <Request>JSON.parse(data)["crossedRequestDuration"];
-        this._crossedRequestStart = <Request>JSON.parse(data)["crossedRequestStart"];
+        if (data !== undefined && data !== null && data !== '') {
 
+          this._isWrongDuration = JSON.parse(data)["isWrongDuration"] === 'true';
+          this._crossedRequestDuration = <Request>JSON.parse(data)["crossedRequestDuration"];
+          this._crossedRequestStart = <Request>JSON.parse(data)["crossedRequestStart"];
+        }
         if (this._crossedRequestStart === undefined && this._crossedRequestDuration === undefined && !this._isWrongDuration) {
           this.scheduleService.initReservationsForPartner(request.partnerId, 1);
           this.scheduleService.initReservationsForPartner(request.partnerId, 2);
         }
       });
   }
+  private userProperties:MenuItem[]=[];
+  private initUserProperties(){
+    this.userProperties = [
+      {label: 'My account', icon: 'fa fa-user', command: () => {
+        this.goToMyAccount();
+      }},
+      {label: 'Sign Out', icon: 'fa fa-sign-out', command: () => {
+        this.partnerService.logout(this._partnerId);
+      }},
+    ];
+  }
+
+  private isInScheduleState:boolean = true;
+  goToSchedule(){
+    this.isInScheduleState = true;
+  }
+
+  goToRequests(){
+    this.isInScheduleState = false;
+  }
+
 
 
   cancelAddingCustomEvent(): void {

@@ -1,11 +1,41 @@
-<button pButton type="button" label="Go My Account" (click)="goToMyAccount()"></button>
-<p-tabView>
-  <p-tabPanel header="Schedule">
-    <div style="margin: 0 auto; display: block; width: 45%;height: 50%;">
+<div class="ui-grid ui-grid-responsive ui-fluid">
+  <div class="ui-grid-row">
+    <div style="margin-left: 40%;" class="ui-grid-col-4">
+      <span class="fa-lg" style="border-bottom:solid; border-width: medium; border-color: red;margin-right: 20px;" *ngIf="isInScheduleState">
+      <i class="fa fa-briefcase soso-icon" aria-hidden="true" (click)="goToSchedule()"></i>
+      Schedule
+    </span>
+      <span class="fa-lg" *ngIf="!isInScheduleState" style="margin-right: 20px;">
+      <i class="fa fa-briefcase soso-icon" aria-hidden="true" (click)="goToSchedule()"></i>
+        Schedule
+    </span>
+      <span class="fa-lg" style="border-bottom:solid; border-width: medium; border-color: red;" *ngIf="!isInScheduleState">
+      <i class="fa fa-list-ul soso-icon" aria-hidden="true" (click)="goToRequests()"></i>
+      New Requests
+    </span>
+      <span class="fa-lg" *ngIf="isInScheduleState">
+      <i class="fa fa-list-ul soso-icon" aria-hidden="true" (click)="goToRequests()"></i>
+      New Requests
+    </span>
+
+    </div>
+    <div class="ui-grid-col-4">
+      <div  class="ui-grid-row">
+        <span>
+          <p-splitButton label="Workspace" [style]="{'width':'120px;'}" [model]="userProperties"></p-splitButton>
+        </span>
+      </div>
+    </div>
+  </div>
+
+
+</div>
+    <div *ngIf="isInScheduleState" class="scheduleBlock" >
       <p-schedule [events]="getSchedule()"
                   [header]="header"
                   [editable]="true"
                   defaultView="agendaDay"
+                  [eventLimit]="3"
                   [allDaySlot]="false"
                   (onEventClick)="onEventClickHandler($event)"
                   (onDayClick)="onDayClickHandler($event)">
@@ -72,7 +102,7 @@
               [modal]="false"
               [contentStyle]="{'overflow':'visible'}"
               [style]="{'overflow':'visible'}">
-      <p-header style="display:none !important;">
+      <p-header   style="display:none !important;">
       </p-header>
       <div class="ui-grid ui-grid-responsive ui-fluid" *ngIf="selectedRequest()">
         <div class="ui-grid-row">
@@ -118,8 +148,7 @@
         </div>
       </p-footer>
     </p-dialog>
-  </p-tabPanel>
-  <p-tabPanel header="New requests ({{losTnewRequests().length}})">
+  <div *ngIf="!isInScheduleState">
     <p-dataList [value]="losTnewRequests()" [paginator]="true" [rows]="5"
                 *ngIf="losTnewRequests().length != 0">
 
@@ -184,8 +213,7 @@
         </div>
       </ng-template>
     </p-dataList>
-  </p-tabPanel>
-</p-tabView>
+  </div>
 
 <p-dialog [(visible)]="hasNewRequest" [responsive]="true" showEffect="fade" [modal]="true" width="450">
   <div>You have new request | count is: {{newEvents().length}}</div>

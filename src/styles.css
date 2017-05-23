@@ -4,3 +4,216 @@
   border: 3px red;
   width: auto;
 }
+
+.soso-icon{
+  color:#277fb3;
+}
+
+html, body {
+  overflow-x: hidden;
+}
+body {
+  position: relative
+}
+
+
+/* web app design */
+@media screen and (min-width: 650px){
+  div.ui-g-12{
+    width:25%;
+    padding: 2%;
+  }
+
+  .soso-logo{
+    margin-top: 0.8%;
+    margin-left: 10%;
+    background-color: #277fb3;
+    color: white;
+    font-weight: bold;
+    font-size: xx-large;
+    border: 1px solid white;
+    border-radius: 10px;
+    width: 165px;
+    height: 72%;
+  }
+
+  .soso-languages-block{
+    float: right;
+    margin-top: 1.5%;
+    margin-right: 10%;
+  }
+
+  .soso-logo-text{
+    margin-left: 12%;
+    width: 100%;
+    font-family: "Fira Code";
+  }
+
+  .soso-header{
+    display: inline-block;
+    width: 100%;
+    background-color: #3baae3;
+    height: 75px ;
+  }
+
+  .soso-partner-account{
+    margin-right: 24%;
+    margin-left: 24%;
+    margin-top: 3%;
+  }
+
+  .soso-upload-main-photo-btn{
+    border-radius: 35% !important;
+    background-color: aliceblue;
+    height: 35px !important;
+    width: 35px !important;
+  }
+
+  .soso-partner-photo{
+    margin-left: 50%;
+  }
+
+  .soso-partner-details-info{
+
+  }
+
+  .soso-partner-property-button{
+    width: 23% !important;
+  }
+
+
+
+  .soso-partner-header{
+    margin-top: 1%;
+    display: inline-block;
+  }
+
+  .soso-partner-properties{
+    width: 50% !important;
+    display: inline !important;
+    float: left !important;
+    margin-left: 5%;
+
+  }
+
+  .soso-partner-notification{
+    width: 10% !important;
+    display: inline !important;
+    float: right !important;
+    margin-left: 25%;
+
+  }
+
+
+
+  .scheduleBlock{
+    margin: 5% 20%; display: block; width: 60%;
+  }
+
+  div.ui-g-12:hover {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    color: #277fb3;
+    border-radius: 4%;
+  }
+
+
+  div.ui-md-3{
+    width: 25%;
+
+  }
+
+  div.ui-datagrid-content.ui-widget-content{
+    background-color: white;
+    border:none;
+    margin-left: 10%;
+    margin-right: 10%;
+  }
+
+  .validation-error-block{
+    margin-top: 1%;
+    background-color: pink;
+    width: 100%;
+    border: 1px solid;
+    border-radius: 10px;
+    border-color: red;
+
+  }
+}
+
+
+/* mobile design */
+@media screen and (max-width: 650px){
+  .scheduleBlock{
+    width: 100%;
+  }
+
+  .soso-logo{
+    margin-top: 0.8%;
+    margin-left: 10%;
+    background-color: #277fb3;
+    color: white;
+    font-weight: bold;
+    font-size: xx-large;
+    border: 1px solid white;
+    border-radius: 10px;
+    width: 120px;
+    height: 72%;
+  }
+
+  .validation-error-block{
+    margin-top: 1%;
+    background-color: pink;
+    width: 100%;
+    border: 1px solid;
+    border-radius: 10px;
+    border-color: red;
+
+  }
+
+  .soso-languages-block{
+    float: right;
+    margin-top: 1.5%;
+    margin-right: 10%;
+  }
+
+  .soso-logo-text{
+    margin-left: 14.5%;
+    width: 100%;
+    font-family: "Fira Code";
+  }
+
+  .soso-header{
+    display: inline-block;
+    width: 100%;
+    background-color: #3baae3;
+    height: 75px ;
+  }
+
+
+
+  div.ui-md-3:hover {
+    box-shadow: 0  0 rgba(0, 0, 0, 0.2), 0 0 rgba(0, 0, 0, 0.19);
+    color: #277fb3;
+    border-radius: 4%;
+  }
+
+  div.ui-g-12{
+    width:50%;
+    padding: 4%;
+  }
+
+  div.ui-md-3{
+    width: 50%;
+  }
+
+  div.ui-datagrid-content.ui-widget-content{
+    background-color: white;
+    border:none;
+    margin-left: 5%;
+    margin-right: 5%;
+  }
+
+  button.fc-today-button.ui-button.ui-state-default.ui-corner-left.ui-corner-right.ui-state-disabled{
+    display: none;
+  }
+}

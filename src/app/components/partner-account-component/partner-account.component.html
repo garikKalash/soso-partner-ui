@@ -1,58 +1,71 @@
-<button pButton type="button" label="My Orders" (click)="goToMyOrders()"></button>
+<div class="ui-grid ui-grid-responsive ui-fluid">
+  <div class="ui-grid-row soso-partner-header">
+    <div class="ui-grid-col-4 soso-partner-properties">
+      <p-splitButton label="My account" [style]="{'width':'45%'}" [model]="userProperties"></p-splitButton>
+    </div>
+    <div class="ui-grid-col-3 soso-partner-notification">
 
-<button pButton type="button" label="Sign Out" (click)="logout()"></button>
-
-<div id="partnerDetailsBlockId" style="margin-right: 24%;margin-left: 24%;">
-  <div style="display: inline-block;float: left;">
-    <img id="partnerAccountImageId" [src]="safeImage(partner.imgpath)"
-         style="width: 250px; height: 250px; margin-right: 5px"/>
-    <label class="custom-file-upload">
-      <input name="file" type="file" ng2FileSelect [uploader]="accountImageUploader"/>
-      <i class="fa fa-plus"></i>
-    </label>
-  </div>
-  <div>
-
-
-  </div>
-  <div>
-    <p for="usernameId" class="bold-label">Username:</p>
-    <p id="usernameId">{{partner.username}}</p>
-    <p class="bold-label">First Name:</p>
-    <p>{{partner.name}}</p>
-    <div class="ui-grid-col-3">
-    <p class="bold-label">Telephone:</p>
-    <input type="text" pInputText *ngIf="_isEditingPartnerMainDetails" id="partnerNameId"
-           [(ngModel)]="_editedPartner.telephone" field="_editedPartner.telephone"/>
-    <div class="validation-error-block" *ngIf="_isWrongTelephone">Telephone number is required.</div>
-      <p *ngIf="!_isEditingPartnerMainDetails">{{partner.telephone}}</p>
+      <i class="fa fa-bell-o fa-2x soso-icon" aria-hidden="true" (click)="op.toggle($event)"></i>
+      <div
+        style="height: 8px;width: 8px; border-radius: 10px; background-color: orange;margin-top: -20%;"
+        *ngIf="hasNewRequest"></div>
+      <p-overlayPanel #op [style]="{'width':'100%;'}">
+        <div *ngIf="hasNewRequest" (click)="closeNewRequests();goToMyOrders();">
+          You have new request please go workspace for more.
+        </div>
+        <div *ngIf="!hasNewRequest">
+          There aren't new events.
+        </div>
+      </p-overlayPanel>
     </div>
   </div>
-  <div>
-    <p class="bold-label">Service:</p>
-    <p>{{partner.serviceName}}</p>
-    <p class="bold-label">Address:</p>
-    <p>{{partner.address}}</p>
+</div>
+
+<div id="partnerDetailsBlockId" class="soso-partner-account">
+  <div class="soso-partner-photo" style="display: block">
+    <div>
+      <img id="partnerAccountImageId" [src]="safeImage(partner.imgpath)"
+           style="width: 100px; height: 100px; margin-right: 5px; border-radius: 35%;"/>
+    </div>
+    <div style="margin-top: -6%;margin-left: 13.5%;width: 9%;">
+      <label class="custom-file-upload soso-upload-main-photo-btn">
+        <input name="file" type="file" ng2FileSelect [uploader]="accountImageUploader"/>
+        <i class="fa fa-plus"></i>
+      </label>
+    </div>
+  </div>
+  <hr>
+  <div class="soso-partner-details-info">
+    <p id="usernameId"><span class="bold-label">Username:</span>  {{partner.username}}</p>
+    <p><span class="bold-label">Name:</span> {{partner.name}}</p>
+    <div class="ui-grid-row">
+      <p class="bold-label">Telephone:</p>
+      <p *ngIf="!_isEditingPartnerMainDetails">{{partner.telephone}}   <span><i class="fa fa-pencil-square" *ngIf="!_isEditingPartnerMainDetails" aria-hidden="true"
+                                                                              (click)="editPartnerMainInfo()"></i></span></p>
+
+
+      <input type="text" pInputText *ngIf="_isEditingPartnerMainDetails" id="partnerNameId"
+             [(ngModel)]="_editedPartner.telephone" field="_editedPartner.telephone"/>
+      <i class="fa fa-check-circle" *ngIf="_isEditingPartnerMainDetails" aria-hidden="true"
+         (click)="saveMainInfo()"></i>
+      <i class="fa fa-times-circle" *ngIf="_isEditingPartnerMainDetails" aria-hidden="true"
+         (click)="cancelEditingMainInfo()"></i>
+      <div class="validation-error-block" *ngIf="_isWrongTelephone">Telephone number is required.</div>
+
+  </div>
+    <p><span class="bold-label">Service:</span> {{partner.serviceName}}</p>
+    <p><span class="bold-label">Address:</span> {{partner.address}}  <span><i class="fa fa-pencil-square" aria-hidden="true" (click)="showAddress()"></i></span></p>
   </div>
 
-  <div>
-    <button pButton type="button" label="Edit my Details" (click)="editPartnerMainInfo()"
-            *ngIf="!_isEditingPartnerMainDetails"></button>
-    <button pButton type="button" label="Save Details" (click)="saveMainInfo()"
-            *ngIf="_isEditingPartnerMainDetails"></button>
-    <button pButton type="button" label="Cancel" (click)="cancelEditingMainInfo()"
-            *ngIf="_isEditingPartnerMainDetails"></button>
-  </div>
 
   <hr>
-  <div>
-    <button pButton type="button" label="Feedbacks" (click)="showFeedbacks()"></button>
-    <button pButton type="button" label="Photos" (click)="showPhotos()"></button>
-    <button pButton type="button" label="Notice" (click)="showNotices()"></button>
+  <div style="display: block;">
+    <button pButton type="button" label="Feedbacks" class="soso-partner-property-button" (click)="showFeedbacks()"></button>
+    <button pButton type="button" label="Photos" class="soso-partner-property-button" (click)="showPhotos()"></button>
+    <button pButton type="button" label="Notice" class="soso-partner-property-button" (click)="showNotices()"></button>
     <!--<button pButton type="button" label="Followers" (click)="showFollowers()"></button>
     -->
-    <button pButton type="button" label="Address" (click)="showAddress()"></button>
-    <button pButton type="button" label="My services" (click)="showServices()"></button>
+    <button pButton type="button" label="Services" class="soso-partner-property-button" (click)="showServices()"></button>
   </div>
 </div>
 
@@ -123,7 +136,7 @@
   </p-header>
   <p-dataGrid [value]="partner.feedbacks" [paginator]="true" [rows]="1">
     <ng-template let-feedback pTemplate="item">
-      <div  class="ui-grid ui-grid-responsive">
+      <div class="ui-grid ui-grid-responsive">
         <rating [ngModel]="feedback.rate"
                 [float]="true" [readonly]="true">
         </rating>
@@ -171,12 +184,12 @@
           (onAfterHide)="hideFollowers()" (onBeforeShow)="resize($event)" [closable]="true">
 
 </p-dialog>
-<p-dialog [(visible)]="hasNewRequest" [responsive]="true" showEffect="fade" [modal]="true">
+<!--<p-dialog [(visible)]="hasNewRequest" [responsive]="true" showEffect="fade" [modal]="true">
   <div>You have new request | count is: {{newEvents().length}}</div>
   <button pButton type="button" label="OK" (click)="closeNewRequests()"></button>
 
 
-</p-dialog>
+</p-dialog>-->
 
 <p-dialog header="Event in during" [visible]="_thereIsNowRequest"
           [closable]="false" [closeOnEscape]="false" [responsive]="true" showEffect="fade"
@@ -222,7 +235,8 @@
         <input placeholder="Գրիր հասցեդ․․․" autocorrect="off" [(ngModel)]="_editedPartner.address" autocapitalize="off"
                spellcheck="off" type="text" class="form-control" #search [formControl]="mapSearchControl()">
       </div>
-      <sebm-google-map id="map" #map style="height:200px !important;" [latitude]="mapLatitude()" [longitude]="mapLongitude()"
+      <sebm-google-map id="map" #map style="height:60% !important;" [latitude]="mapLatitude()"
+                       [longitude]="mapLongitude()"
                        [scrollwheel]="false"
                        [zoom]="mapZoom()">
         <sebm-google-map-marker (dragEnd)="addressMarkerDragEnd($event)" [markerDraggable]="needChangeAddress()"

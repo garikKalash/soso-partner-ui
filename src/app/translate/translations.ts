@@ -11,8 +11,8 @@ export const TRANSLATIONS = new OpaqueToken('translations');
 
 // all traslations
 export  const dictionary = {
-  [LANG_EN_NAME]: LANG_EN_TRANS,
-  [LANG_AM_NAME]: LANG_AM_TRANS,
+  'en': LANG_EN_TRANS,
+  'am': LANG_AM_TRANS,
 };
 // providers
 export const TRANSLATION_PROVIDERS = [

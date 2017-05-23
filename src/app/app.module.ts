@@ -32,8 +32,9 @@ import {RatingModule} from "ngx-rating";
 import {TranslateService} from "./translate/translate.service";
 import {TRANSLATION_PROVIDERS} from "./translate/translations";
 import {TranslatePipe} from "./translate/translate.pipe";
+import {SplitButtonModule} from 'primeng/primeng';
 
-
+import {OverlayPanelModule} from "primeng/components/overlaypanel/overlaypanel";
 
 @NgModule({
   declarations: [
@@ -68,7 +69,9 @@ import {TranslatePipe} from "./translate/translate.pipe";
     InputSwitchModule,
     DataTableModule,
     DataGridModule,
-    RatingModule
+    RatingModule,
+    SplitButtonModule,
+    OverlayPanelModule
   ],
   providers: [
     HttpWrap,
