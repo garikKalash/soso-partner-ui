@@ -7,15 +7,15 @@ export class ServiceUrlProvider {
   private static mode: number = 2;
 
   public static  getAuthenticationServiceUrl(): string {
-    return ServiceUrlProvider.mode === 1 ? "http://localhost:8002/" : "http://soso-authentication-service.herokuapp.com/";
+    return ServiceUrlProvider.mode === 1 ? "http://localhost:8002/" : "https://soso-authentication-service.herokuapp.com/";
   }
 
   public static getEventListenerServiceUrl(): string {
-    return ServiceUrlProvider.mode === 1 ? "http://localhost:3000/" : "http://soso-event-service.herokuapp.com/";
+    return ServiceUrlProvider.mode === 1 ? "http://localhost:3000/" : "https://soso-event-service.herokuapp.com/";
   }
 
   public static getClientServiceUrl(): string {
-    return ServiceUrlProvider.mode === 1 ? "http://localhost:8080/" : "http://soso-client.herokuapp.com/";
+    return ServiceUrlProvider.mode === 1 ? "http://localhost:8080/" : "https://soso-client.herokuapp.com/";
   }
 
   public static  getPartnerServiceUrl(): string {
@@ -23,7 +23,7 @@ export class ServiceUrlProvider {
   }
 
   public static  getCommonDataServiceUrl(): string {
-    return ServiceUrlProvider.mode === 1 ? "http://localhost:8001/" : "http://soso-common-data.herokuapp.com/";
+    return ServiceUrlProvider.mode === 1 ? "http://localhost:8001/" : "https://soso-common-data.herokuapp.com/";
   }
 
 }
