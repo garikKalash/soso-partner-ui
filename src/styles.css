@@ -194,11 +194,54 @@ body {
   .soso-partner-user-properties{
     width: 120px;
   }
+
+  .soso-wlc-page-content {
+    margin: 10% 30%;
+    background-color: aliceblue;
+    border: 1px solid;
+    border-color: #3baae3;
+    border-radius: 10px;
+    padding: 5%;
+  }
+
+  .soso-wlc-page-text {
+    font-weight: bold;
+    font-size: x-large;
+  }
+
+  .soso-wlc-page-buttons {
+    margin-top: 5%;
+    margin-left: 30%;
+  }
 }
 
 
 /* mobile design */
 @media screen and (max-width: 650px){
+
+  .soso-welcome-page {
+
+  }
+
+  .soso-wlc-page-content {
+    margin: 10% 20%;
+    background-color: aliceblue;
+    border: 1px solid;
+    border-color: #3baae3;
+    border-radius: 10px;
+    padding: 5%;
+  }
+
+  .soso-wlc-page-text {
+    font-weight: bold;
+    font-size:medium ;
+  }
+
+  .soso-wlc-page-buttons {
+    margin-top: 5%;
+    margin-left: 30%;
+  }
+
 
 
   .scheduleBlock{

@@ -1,11 +1,23 @@
+<div class="soso-welcome-page">
+  <div class="soso-wlc-page-content">
+    <div class="soso-wlc-page-text">{{'welcomepagetext' | translate}}
+    </div>
+    <div class="soso-wlc-page-buttons">
+      <button pButton type="button" label="{{'signin' | translate}}" (click)="showSigninDialog()"></button>
+      <button pButton type="button" label="{{'signup' | translate}}" (click)="showSignupDialog()"></button>
+    </div>
+  </div>
+  <p-dialog [(visible)]="_isSigningUser" [responsive]="true" showEffect="fade" [modal]="true"
+            [closable]="true">
+    <div class="soso-dialog-content">
+      <login-component></login-component>
+    </div>
+  </p-dialog>
+  <p-dialog [(visible)]="_isSignupingUser" [responsive]="true" showEffect="fade" [modal]="true"
+            [closable]="true">
+    <div class="soso-dialog-content">
+      <connect-to-system-component></connect-to-system-component>
+    </div>
+  </p-dialog>
+</div>
 
-<button pButton type="button" label="Signin" (click)="showSigninDialog()"></button>
-<button pButton type="button" label="Sign up" (click)="showSignupDialog()"></button>
-<p-dialog [(visible)]="_isSigningUser" [responsive]="true" showEffect="fade" [modal]="true"
-          [closable]="true">
-  <login-component></login-component>
-</p-dialog>
-<p-dialog [(visible)]="_isSignupingUser" [responsive]="true" showEffect="fade" [modal]="true"
-          [closable]="true">
-  <connect-to-system-component></connect-to-system-component>
-</p-dialog>

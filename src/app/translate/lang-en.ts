@@ -38,7 +38,6 @@ export const LANG_EN_TRANS = {
   'backtopartnerdetails': 'Go my details',
   'cancelbtnlabel': 'Cancel',
   'savebtnlabel': 'Save',
-  'welcomepagetext':'Welcome to SOSO :) For looking services please signin or join to our system.',
   'wrongpassword': 'Invalid password.',
   'wrongusername': 'Invalid phonenumber.',
   'wrongdetails': 'Invalid password or phonenumber.',
@@ -80,7 +79,8 @@ export const LANG_EN_TRANS = {
   'accept' : 'Accept',
   'decline' : 'Decline',
   'popup_new_request':'You have new request | count is:',
-  'ok':'OK'
+  'ok':'OK',
+  'welcomepagetext':'Welcome to SOSO :) For provide your services please signin or join to our system.'
 
 
 
