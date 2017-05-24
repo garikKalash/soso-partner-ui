@@ -15,24 +15,24 @@ import {ConverterUtils} from "../../_commonServices/converter.service";
   styleUrls: ['connectToSystem.component.css']
 })
 export class ConnectToSystemComponent implements OnInit {
-  private _newPartner: Partner = <Partner>{};
+  public _newPartner: Partner = <Partner>{};
   loading = false;
 
-  private services: Service[] = [];
-  private servicesAsSelectItems: SelectItem[] = [];
-  private selectedService: Service;
+  public services: Service[] = [];
+  public servicesAsSelectItems: SelectItem[] = [];
+  public selectedService: Service;
 
-  private _isShortTelephone: boolean = false;
-  private _isDoubleUsername: boolean = false;
-  private _isInvalidPassword: boolean = false;
-  private _isInvalidUsername: boolean = false;
-  private _isDoubleTelephone: boolean = false;
-  private _isInvalidName: boolean = false;
-  private _isInvalidServiceId: boolean = false;
+  public _isShortTelephone: boolean = false;
+  public _isDoubleUsername: boolean = false;
+  public _isInvalidPassword: boolean = false;
+  public _isInvalidUsername: boolean = false;
+  public _isDoubleTelephone: boolean = false;
+  public _isInvalidName: boolean = false;
+  public _isInvalidServiceId: boolean = false;
 
-  constructor(private router: Router,
-              private partnerService: PartnerService,
-              private classifierService: ClassifierService) {
+  constructor(public router: Router,
+              public partnerService: PartnerService,
+              public classifierService: ClassifierService) {
   }
 
   ngOnInit(): void {

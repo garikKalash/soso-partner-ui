@@ -16,14 +16,14 @@ import {ConverterUtils} from "../../_commonServices/converter.service";
 export class LoginComponent implements OnInit {
   loading = false;
   _partnerModel: Partner = <Partner>{};
-  private _isShortTelephone: boolean = false;
-  private _wrongpartner: boolean = false;
-  private _isInvalidPassword: boolean = false;
+  public _isShortTelephone: boolean = false;
+  public _wrongpartner: boolean = false;
+  public _isInvalidPassword: boolean = false;
 
   ngOnInit(): void {
   }
 
-  constructor( private router: Router,private partnerService: PartnerService) {
+  constructor( public router: Router,public partnerService: PartnerService) {
 
   }
 

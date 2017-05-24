@@ -18,20 +18,20 @@ import {MenuItem} from "primeng/components/common/api";
   styleUrls: ['partner-orders.component.css']
 })
 export class PartnerOrdersComponent implements OnInit {
-  private _partnerId: number;
-  private _mainServiceId: number;
-  private header: any = {left: 'prev,next today', center: 'title', right: 'agendaDay,agendaWeek,month'};
-  private requestNow: Request = <Request>{};
-  private _thereIsNowRequest: boolean = false;
+  public _partnerId: number;
+  public _mainServiceId: number;
+  public header: any = {left: 'prev,next today', center: 'title', right: 'agendaDay,agendaWeek,month'};
+  public requestNow: Request = <Request>{};
+  public _thereIsNowRequest: boolean = false;
 
 
-  constructor(private scheduleService: ScheduleService,
-              private partnerService: PartnerService,
-              private classifierService: ClassifierService,
-              private router: Router,
-              private activatedRoute: ActivatedRoute,
-              private authenticationService: AuthenticationService,
-              private eventListenerService: EventListenerService) {
+  constructor(public scheduleService: ScheduleService,
+              public partnerService: PartnerService,
+              public classifierService: ClassifierService,
+              public router: Router,
+              public activatedRoute: ActivatedRoute,
+              public authenticationService: AuthenticationService,
+              public eventListenerService: EventListenerService) {
 
   }
 
@@ -43,7 +43,7 @@ export class PartnerOrdersComponent implements OnInit {
 
   }
 
-  private initReservationsForPartner(): void {
+  public initReservationsForPartner(): void {
     this.activatedRoute.queryParams.subscribe((params: Params) => {
       this._partnerId = +params['partnerId'];
       this._mainServiceId = +params['serviceId'];
@@ -99,7 +99,7 @@ export class PartnerOrdersComponent implements OnInit {
     });
   }
 
-  private _thereWasNewRequest: boolean = false;
+  public _thereWasNewRequest: boolean = false;
 
   autoCheckRequestExisting() {
     this._thereWasNewRequest = this._thereIsNowRequest;
@@ -132,9 +132,9 @@ export class PartnerOrdersComponent implements OnInit {
     return this.scheduleService.selectedEvent;
   }
 
-  private _isWrongDurationNewRequest: boolean = false;
-  private _crossedRequestDurationNewRequest: Request;
-  private _crossedRequestStartNewRequest: Request;
+  public _isWrongDurationNewRequest: boolean = false;
+  public _crossedRequestDurationNewRequest: Request;
+  public _crossedRequestStartNewRequest: Request;
 
   addCustomEvent(): void {
     this.scheduleService.customRequest.partnerId = this._partnerId;
@@ -161,9 +161,9 @@ export class PartnerOrdersComponent implements OnInit {
     });
   }
 
-  private _isWrongDuration: boolean = false;
-  private _crossedRequestDuration: Request
-  private _crossedRequestStart: Request;
+  public _isWrongDuration: boolean = false;
+  public _crossedRequestDuration: Request
+  public _crossedRequestStart: Request;
 
 
   acceptRequest(request: Request): void {
@@ -182,8 +182,8 @@ export class PartnerOrdersComponent implements OnInit {
         }
       });
   }
-  private userProperties:MenuItem[]=[];
-  private initUserProperties(){
+  public userProperties:MenuItem[]=[];
+  public initUserProperties(){
     this.userProperties = [
       {label: 'My account', icon: 'fa fa-user', command: () => {
         this.goToMyAccount();
@@ -194,7 +194,7 @@ export class PartnerOrdersComponent implements OnInit {
     ];
   }
 
-  private isInScheduleState:boolean = true;
+  public isInScheduleState:boolean = true;
   goToSchedule(){
     this.isInScheduleState = true;
   }
@@ -255,7 +255,7 @@ export class PartnerOrdersComponent implements OnInit {
     this.scheduleService.initReservationsForPartner(this._partnerId, 2);
   }
 
-  private _hasNewRequest: boolean;
+  public _hasNewRequest: boolean;
 
   get hasNewRequest(): boolean {
     this._hasNewRequest = this.eventListenerService.thereIsNewEvent;

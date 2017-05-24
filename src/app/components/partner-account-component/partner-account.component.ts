@@ -28,48 +28,48 @@ import {ServiceUrlProvider} from "../../_commonServices/mode-resolver.service";
 })
 export class PartnerAccountComponent implements OnInit {
 
-  private accountImageUploader: FileUploader;
+  public accountImageUploader: FileUploader;
 
-  private partnerPhotoUploader: FileUploader;
-
-
-  private _partner: Partner = <Partner>{};
-  private _editedPartner: Partner = <Partner>{};
-  private _averageRate: number = 2.5;
-
-  private _isEditingPartnerMainDetails: boolean = false;
-  private _isWrongTelephone: boolean = false;
-
-  private _isEditingPartnerNoticeDetails: boolean = false;
-
-  private mainServices: Service[] = [];
-
-  private userProperties:MenuItem[]=[];
-
-  private serviceSelectItems: SelectItem[] = [];
-  private newSubServiceToPartner: PartnerServiceDetail = <PartnerServiceDetail>{};
+  public partnerPhotoUploader: FileUploader;
 
 
-  private showingFeedbacks: boolean = false;
-  private showingNotices: boolean = false;
-  private showingPhotos: boolean = false;
-  private showingFollowers: boolean = false;
-  private showingAddress: boolean = false;
-  private showingServices: boolean = false;
+  public _partner: Partner = <Partner>{};
+  public _editedPartner: Partner = <Partner>{};
+  public _averageRate: number = 2.5;
+
+  public _isEditingPartnerMainDetails: boolean = false;
+  public _isWrongTelephone: boolean = false;
+
+  public _isEditingPartnerNoticeDetails: boolean = false;
+
+  public mainServices: Service[] = [];
+
+  public userProperties:MenuItem[]=[];
+
+  public serviceSelectItems: SelectItem[] = [];
+  public newSubServiceToPartner: PartnerServiceDetail = <PartnerServiceDetail>{};
+
+
+  public showingFeedbacks: boolean = false;
+  public showingNotices: boolean = false;
+  public showingPhotos: boolean = false;
+  public showingFollowers: boolean = false;
+  public showingAddress: boolean = false;
+  public showingServices: boolean = false;
 
   @ViewChild("search")
-  private _searchElementRef: ElementRef;
+  public _searchElementRef: ElementRef;
 
 
-  constructor(private router: Router,
-              private partnerService: PartnerService,
-              private classifierService: ClassifierService,
-              private activatedRoute: ActivatedRoute,
-              private sanitizer: Sanitizer,
-              private addressService: AddressService,
-              private eventListenerService: EventListenerService,
-              private authenticationService: AuthenticationService,
-              private scheduleService:ScheduleService) {
+  constructor(public router: Router,
+              public partnerService: PartnerService,
+              public classifierService: ClassifierService,
+              public activatedRoute: ActivatedRoute,
+              public sanitizer: Sanitizer,
+              public addressService: AddressService,
+              public eventListenerService: EventListenerService,
+              public authenticationService: AuthenticationService,
+              public scheduleService:ScheduleService) {
 
   }
 
@@ -235,7 +235,7 @@ export class PartnerAccountComponent implements OnInit {
   }
 
 
-  private initPartner(): void {
+  public initPartner(): void {
     this.activatedRoute.queryParams.subscribe((params: Params) => {
       let partnerId = +params['partnerId'];
       this.partnerService.getPartnerById(partnerId).subscribe(
@@ -257,9 +257,9 @@ export class PartnerAccountComponent implements OnInit {
     })
   }
 
-  private requestNow: Request = <Request>{};
-  private _thereIsNowRequest: boolean = false;
-  private _thereWasNewRequest: boolean = false;
+  public requestNow: Request = <Request>{};
+  public _thereIsNowRequest: boolean = false;
+  public _thereWasNewRequest: boolean = false;
 
   completeReservation(): void {
     this.requestNow.status = 3; //status of done requests
@@ -306,7 +306,7 @@ export class PartnerAccountComponent implements OnInit {
     )
   }
 
-  private _hasNewRequest: boolean;
+  public _hasNewRequest: boolean;
 
 
   get hasNewRequest(): boolean {
@@ -323,7 +323,7 @@ export class PartnerAccountComponent implements OnInit {
     return this.eventListenerService.newEvents;
   }
 
-  private initFileUploader(): void {
+  public initFileUploader(): void {
     this.accountImageUploader = new FileUploader({
       url: ServiceUrlProvider.getPartnerServiceUrl() + "partner/uploadAccountImage",
       additionalParameter: {"id": this._partner.id}
@@ -336,7 +336,7 @@ export class PartnerAccountComponent implements OnInit {
     };
   }
 
-  private initPartnerPhotoUploader(): void {
+  public initPartnerPhotoUploader(): void {
     this.partnerPhotoUploader = new FileUploader({
       url: ServiceUrlProvider.getPartnerServiceUrl() + "partner/addImageToPartnier",
       additionalParameter: {"id": this._partner.id},
@@ -352,7 +352,7 @@ export class PartnerAccountComponent implements OnInit {
 
   }
 
-  private initUserProperties(){
+  public initUserProperties(){
     this.userProperties = [
       {label: 'Workspace', icon: 'fa fa-list-ul', command: () => {
         this.goToMyOrders();
@@ -417,8 +417,8 @@ export class PartnerAccountComponent implements OnInit {
   }
 
 
-  private isAbsenceService: boolean = false;
-  private isAbsenceDuration: boolean = false;
+  public isAbsenceService: boolean = false;
+  public isAbsenceDuration: boolean = false;
 
   addService(): void {
 
@@ -445,7 +445,7 @@ export class PartnerAccountComponent implements OnInit {
   }
 
 
-  private initServiceSelectItems() {
+  public initServiceSelectItems() {
 
     this.serviceSelectItems.push({label: '--Select Service--', value: null});
     this.newSubServiceToPartner.service = this.serviceSelectItems[0].value;
@@ -482,7 +482,7 @@ export class PartnerAccountComponent implements OnInit {
     }
   }
 
-  private saveEditedMainInfo(): void {
+  public saveEditedMainInfo(): void {
 
     this._editedPartner.id = this._partner.id;
     let data = JSON.stringify(this._editedPartner);
@@ -492,22 +492,22 @@ export class PartnerAccountComponent implements OnInit {
       })
   }
 
-  private clonePartnerMainDetails(): void {
+  public clonePartnerMainDetails(): void {
     this._editedPartner.address = this._partner.address;
     this._editedPartner.telephone = this._partner.telephone;
   }
 
-  private clonePartnerNoticesDetails(): void {
+  public clonePartnerNoticesDetails(): void {
     this._editedPartner.id = this._partner.id;
     this._editedPartner.notices = this._partner.notices;
   }
 
-  private loadEditedMainInfoIntoPartner(): void {
+  public loadEditedMainInfoIntoPartner(): void {
     this._partner.address = this._editedPartner.address;
     this._partner.telephone = this._editedPartner.telephone;
   }
 
-  private uploadAccountImage(): void {
+  public uploadAccountImage(): void {
     for (let item of this.accountImageUploader.queue) {
       item.upload();
     }

@@ -12,7 +12,7 @@ import {HttpWrap} from "./_commonServices/httpWrap.service";
 import {PartnerService} from "./_services/partner.service";
 import {routing} from "./app.routing";
 import {ClassifierService} from "./_services/classifier.service";
-import {FileSelectDirective} from "ng2-file-upload";
+import {FileUploadModule} from "ng2-file-upload";
 import {AgmCoreModule} from "angular2-google-maps/core";
 import {AddressService} from "./_services/address.service";
 import {PartnerOrdersComponent} from "./components/partner-orders-component/partner-orders.component";
@@ -41,7 +41,6 @@ import {OverlayPanelModule} from "primeng/components/overlaypanel/overlaypanel";
     AppComponent,
     WelcomePageComponent,
     PartnerAccountComponent,
-    FileSelectDirective,
     PartnerOrdersComponent,
     ConnectToSystemComponent,
     LoginComponent,
@@ -71,7 +70,8 @@ import {OverlayPanelModule} from "primeng/components/overlaypanel/overlaypanel";
     DataGridModule,
     RatingModule,
     SplitButtonModule,
-    OverlayPanelModule
+    OverlayPanelModule,
+    FileUploadModule
   ],
   providers: [
     HttpWrap,
